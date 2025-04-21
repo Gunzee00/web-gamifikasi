@@ -10,6 +10,12 @@ use App\Http\Controllers\Api\SoalController;
 use App\Http\Controllers\Api\VisualController;
 use App\Http\Controllers\Api\JawabanPenggunaController;
 
+Route::get('/status', function () {
+    return response()->json([
+        'code' => 200,
+        'message' => 'api is running successfully',
+    ], 200);
+});
 
 //daftar user
 Route::post('/register', [AuthController::class, 'register']);
