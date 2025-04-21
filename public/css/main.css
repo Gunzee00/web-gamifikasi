@@ -1,0 +1,184 @@
+/* struktur css */
+/* (*) universal selector */
+/* ada selector seperti body, h1, p, ataupun id (#) atau class (.) */
+/* lalu ada property sperti background color, font-size */
+/* dan terakhir ada property-value seperti white, 20px */
+
+
+/* error pada css biasanya diabaikan jadi lebih teliti dalam menulisnya */
+/* sama seperti html css juga memiliki validator di w3c css validator */
+
+
+/* perbedaan atara , dan tanpa , */
+/* , berarti group selector jadi ketika kamu membuat h1 ,h2 berarti kedua element tersebut terdampak css */
+/* tanpa , adlah kombinasi jadi ketika kamu membuat body footer h1 jadi hanya h1 dalam footer yang terdampak css */
+
+/* ada beberapa unit length sperti px (pixels) points(pt) dan lain-lain */
+
+/* ada juga rem (root em : size yang bergantung pada ukuran default browser) */
+
+/* .color-primary{
+    color: #BC002D;
+} */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #fff;
+}
+
+header{
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: #fff;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+main{
+    /* padding-left: 60px;
+    padding-right: 60px; */
+    min-height: 100vh;
+    padding-top: 10px;
+    padding-bottom: 50px;
+
+}
+
+.main-padding-1{
+    padding-left: 15%; 
+    padding-right: 15%;
+}
+
+.main-padding-2{
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+main .main-padding-1{
+    justify-content: center;
+    align-items: center;    
+}
+
+.centered-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 32px;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 22px;
+}
+
+h5 {
+    font-size: 20px;
+}
+
+h1, h2, h3, h4, h5{
+    font-family: 'Gill Sans', sans-serif;
+    /* font-weight: 700; */
+}
+
+p {
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
+a{
+    font-size: 20px;
+    font-family: sans-serif;
+    text-decoration: none;
+}
+
+.title-extralarge{
+    font-size: 70px;
+    font-weight: 600;
+    color: black;
+    text-align: center;
+}
+
+.txt-small{
+    font-size: 14px;
+}
+
+.txt-algn-center{
+    text-align: center;
+}
+
+.txt-algn-left{
+    text-align: left;
+}
+
+.btn-primary{
+    color: white;
+    font-weight: 00;
+    padding: 8px 16px;
+    border-radius: 8px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    background-color: #BC002D;
+    font-weight: 600;
+    border: none;
+}
+
+
+.btn-primary:hover{
+    background-color: #9c0125;
+}
+
+.btn-white{
+    color: #BC002D;
+    font-weight: 00;
+    padding: 8px 16px;
+    border-radius: 8px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    background-color: white;
+    font-weight: 600;
+    border: 2px solid #ccc;
+}
+
+.btn-white:hover{
+    color: #9c0125;
+}
+
+
+/* Styling untuk pesan error */
+#error {
+    color: #BC002D;
+    font-size: 14px;
+    margin-top: 10px;
+    font-family: 'Gill Sans', sans-serif;
+    text-align: start;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
+}
+

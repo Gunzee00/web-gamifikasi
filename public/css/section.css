@@ -1,0 +1,384 @@
+/* section tipe 1 */
+
+.section-title{
+    font-size: 42px;
+    color: #BC002D;
+    /* transition: 0.3s; */
+}
+
+@media (max-width:1300px) {
+    .section-title{
+        font-size: 32px;
+
+    }
+}
+
+
+.section-type-1{
+    border-radius: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transition: justify-content 0.3s ease-in-out;
+}
+
+.section-type-1-content{
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    width: 90%;
+    gap: 80px;
+}
+
+.section-type-1-image{
+    flex: 1;
+    margin-right: 20px;
+    width: 50%;
+    
+}
+
+.section-type-1-image img{
+    vertical-align: bottom;
+}
+
+.img-sz-section-type-1{
+    width: 300px;
+    height: 300px;
+}
+
+@media (max-width:1300px) {
+    .section-type-1-content{
+        display: flex;
+
+    }
+
+    .section-type-1-text{
+        vertical-align: bottom;
+    }
+}
+
+.section-type-1-text{
+    flex: 2;
+    display: flex;  
+    flex-direction: column;
+    /* justify-content: center; */
+    gap: 10px;
+    width: 50%;
+}
+
+/* mengurangi margin bawaan element */
+.section-type-1-text h2,.section-type-1-text p {
+    margin: 5px 0;
+    padding: 0;
+}
+
+
+@media (max-width:1200px) {
+    .section-type-1{
+        justify-content: center;
+        
+    }
+
+    .section-type-1-content{
+        padding-top: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-type-1-text{
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        order: 2;
+    }
+
+    .section-type-1-image{
+        flex: 2;
+        order: 1;
+        margin-top: 20px;
+        
+    }
+    
+    .section-type-1-image img{
+        vertical-align: bottom;
+    }
+
+    .img-sz-section-type-1{
+        width: 200px;
+        height: 200px;
+    }    
+}
+
+.section-type-1-link{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    display: block;
+    text-decoration: none;
+}
+
+/* section untuk projects */
+
+.project-section-type-1{
+    display: flex;
+    justify-content: center;
+}
+
+.project-section-type-1-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+
+.project-section-type-1-content-text{
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    order: 1;
+}
+
+.project-section-type-1-content-image{
+    flex: 2;
+    order: 2;
+    margin-top: 20px;
+}
+
+.project-section-type-1-content-image img{
+    vertical-align: bottom;
+}
+
+.project-section-type-1-content-img-sz-section-type-2{
+    width: 300px;
+    height: 600px;
+}
+
+/* column section */
+.two-col-section{
+    display:flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.two-col-section .column {
+    flex: 1;
+}
+
+.two-col-section .column h3, .two-col-section .column p{
+    text-align: justify;
+}
+
+@media (max-width:880px) {
+    .two-col-section{
+        justify-content: center;
+        flex-direction: column;
+    }
+}
+
+
+
+.authsection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+}
+.authsection h2{
+    color: #BC002D;
+    text-align: center;
+}
+
+.authsection h2,
+.authsection p {
+    width: 80%; /* Samakan lebar teks dengan form */
+    max-width: 400px; /* Opsional, agar konsisten dengan input */
+    text-align: center; /* Jika ingin teks tetap di tengah */
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.authsection section {
+    width: 100%; /* Pastikan section mengambil seluruh lebar */
+    display: flex;
+    justify-content: center;
+}
+
+.authsection section input{
+    padding: 8px;
+    width: 400px;
+    border-radius: 5px;
+    border: 1px solid #ccc; /* Konsisten untuk input */
+}
+
+.authsection section input,
+.authsection section button {
+    width: 100%; /* Lebar mengikuti parent */
+    max-width: 400px; /* Maksimum lebar */
+    padding: 12px; /* Sama untuk keduanya */
+    border-radius: 5px; 
+    box-sizing: border-box;
+}
+
+.authsection section .btn-white a{
+    text-decoration: none;
+}
+
+
+/* .authsection section button {
+    background-color: #BC002D;
+    color: white;
+    font-weight: 600;
+    border: none;                          
+    cursor: pointer;
+} */
+
+
+.play-section{
+    display: flex;
+    flex-direction: row; 
+}
+
+.section-category{
+    flex: 1; /* Biarkan article mengambil sisa ruang */
+    padding: 20px;
+    min-width: 0; /* Menghindari overflow */
+    gap: 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.card-section-category{
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    /* border: 1px solid #131F24; */
+    border-radius: 5px;
+    min-width: 400px;
+    background-image: url('../../../assets/images/elementtitle.svg');
+    background-size: cover;
+    /* background-position: center; */
+    background-repeat: no-repeat;
+
+}
+
+.card-section-category h3{
+    font-size: 24px;
+    font-weight: 700;
+    color: black;
+}
+
+.card-section-category p{
+    font-size: 240x;
+    color: black;
+}
+
+
+.title-section-category{
+    height: 60;
+    /* background-color: #BC002D; */
+    background-color: transparent;
+    padding: 20px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 5px;
+    background-image: url('../../assets/images/elementtitle.svg');
+    background-size: cover;
+    /* background-position: center; */
+    background-repeat: no-repeat;
+  
+}
+
+.title-section-category h2{
+    color: white;
+    font-weight: 700;
+}
+
+.title-section-category p{
+    color: white;
+}
+
+.class-section{
+    display: flex;
+    flex-direction: row;
+    margin-left: 5%;
+    margin-right: 5%;
+    justify-content: space-between;
+    
+}
+
+.class-card-section{
+    min-height: 400px;
+    width: 30%;
+    background-color: transparent;
+    padding: 20px;
+    background-image: url('../../../assets/images/element1.svg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.class-card-section-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.class-card-section-content p{
+    color: white;
+}
+
+@media (max-width: 400px) {
+    .class-card-section{
+        margin: 20px;
+        width: 80%;
+        height: auto;
+        background-image: none;
+        
+    }
+
+    .class-card-section-content p{
+        color: black;
+    }
+}
+
+
+@media (max-width: 1300px) {
+    .class-section{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .class-card-section{
+        margin: 20px;
+        width: 80%;
+        background-size: contain;
+        height: auto;
+        background-repeat: no-repeat;
+        background-position: center;
+
+    }
+
+    .class-card-section-content {
+        width: 100%; /* Pastikan elemen penuh */
+    }
+}

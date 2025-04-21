@@ -1,0 +1,157 @@
+.section-type-1{
+    border-radius: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-type-1-content{
+    display: flex;
+    width: 90%;
+}
+
+.section-type-1-image{
+    flex: 1;
+    margin-right: 20px;
+    
+}
+
+.section-type-1-image img{
+    vertical-align: bottom;
+}
+
+.img-sz-section-type-1{
+    width: 300px;
+    height: 300px;
+}
+
+@media (max-width:880px) {
+    .section-type-1-image{
+        display: none;
+    }
+}
+
+.section-type-1-text{
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px; /* jarak antar element */
+}
+
+@media (max-width:880px) {
+    .section-type-1-content{
+        padding: 20px;
+    }
+}
+
+/* mengurangi margin bawaan element */
+.section-type-1-text h2,.section-type-1-text p {
+    margin: 5px 0;
+    padding: 0;
+}
+
+
+
+/* section tipe 2 */
+.section-type-2{
+    border-radius: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-type-2-content{
+    display: flex;
+    width: 90%;
+}
+
+.section-type-2-image{
+    flex: 1;
+    margin-right: 20px;
+    
+}
+
+.section-type-2-image img{
+    vertical-align: bottom;
+}
+
+.img-sz-section-type-2{
+    width: 300px;
+    height: 300px;
+}
+
+@media (max-width:880px) {
+    .section-type-2-content{
+        display: flex;
+
+    }
+
+    .section-type-2-image img{
+        vertical-align: bottom;
+    }
+}
+
+.section-type-2-text{
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px; /* jarak antar element */
+}
+
+/* mengurangi margin bawaan element */
+.section-type-2-text h2,.section-type-2-text p {
+    margin: 5px 0;
+    padding: 0;
+}
+
+@media (max-width:880px) {
+    .section-type-2{
+        justify-content: center;
+        
+    }
+
+    .section-type-2-content{
+        padding-top: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .section-type-2-text{
+        text-align: center;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 10px;
+        order: 1;
+    }
+
+    .section-type-2-image{
+        flex: 2;
+        order: 2;
+        margin-top: 20px;
+        
+    }
+    
+    .section-type-2-image img{
+        vertical-align: bottom;
+    }
+
+    .img-sz-section-type-2{
+        width: 150px;
+        height: 150px;
+    }    
+}
+
+.section-type-2-link{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+    display: block;
+    text-decoration: none;
+}
