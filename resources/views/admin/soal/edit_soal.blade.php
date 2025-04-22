@@ -8,7 +8,7 @@
             <div class="card p-4">
                 <h4 class="mb-4">Edit Soal - {{ ucfirst($soal->tipeSoal) }}</h4>
 
-                {{-- Error Validation --}}
+                {{-- Tampilkan error jika ada --}}
                 @if($errors->any())
                     <div class="alert alert-danger">
                         <ul class="mb-0">
@@ -23,19 +23,19 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- Hidden --}}
+                    {{-- Hidden id_level & tipeSoal --}}
                     <input type="hidden" name="id_level" value="{{ $soal->id_level }}">
                     <input type="hidden" name="tipeSoal" value="{{ $soal->tipeSoal }}">
 
                     {{-- Pertanyaan --}}
                     <div class="mb-3">
-                        <label class="form-label">Pertanyaan</label>
-                        <textarea name="pertanyaan" class="form-control" rows="3">{{ old('pertanyaan', $soal->pertanyaan) }}</textarea>
+                        <label for="pertanyaan" class="form-label">Pertanyaan</label>
+                        <textarea class="form-control" name="pertanyaan" rows="3">{{ old('pertanyaan', $soal->pertanyaan) }}</textarea>
                     </div>
 
                     {{-- Audio Pertanyaan --}}
                     <div class="mb-3">
-                        <label class="form-label">Audio Pertanyaan (Opsional)</label>
+                        <label for="audioPertanyaan" class="form-label">Audio Pertanyaan (Opsional)</label>
                         <input type="file" class="form-control" name="audioPertanyaan">
                         @if($soal->audioPertanyaan)
                             <audio controls class="mt-2" style="width: 250px;">
@@ -47,7 +47,7 @@
                     {{-- Media --}}
                     @if(!in_array($soal->tipeSoal, ['kinestetik 1', 'visual 2']))
                     <div class="mb-3">
-                        <label class="form-label">Media (Opsional)</label>
+                        <label for="media" class="form-label">Media (Opsional)</label>
                         <input type="file" class="form-control" name="media">
                         @if($soal->media)
                             <div class="mt-2">
@@ -76,28 +76,25 @@
                         @endforeach
                     </div>
 
-                    {{-- Pasangan (kinestetik - upload file) --}}
+                    {{-- Pasangan (khusus kinestetik, input file) --}}
                     @if(Str::startsWith($soal->tipeSoal, 'kinestetik'))
                     <div class="mb-3">
-                        <label class="form-label">Pasangan (File per Pasangan)</label>
+                        <label class="form-label">Pasangan (Upload File untuk A-D)</label>
                         @foreach(['A','B','C','D'] as $opt)
                         <div class="mt-3 border rounded p-3">
-                            <label class="form-label">Pasangan {{ $opt }}</label>
+                            <label class="form-label">File Pasangan {{ $opt }}</label>
                             <input type="file" name="pasangan{{ $opt }}" class="form-control">
-                            @php
-                                $field = 'pasangan' . $opt;
-                                $fileUrl = $soal->$field;
-                            @endphp
-                            @if($fileUrl)
+                            @php $file = $soal->{'pasangan'.$opt}; @endphp
+                            @if($file)
                                 <div class="mt-2">
-                                    @if(preg_match('/\.(jpg|jpeg|png|gif)$/i', $fileUrl))
-                                        <img src="{{ $fileUrl }}" class="img-fluid" style="max-width: 200px;">
-                                    @elseif(preg_match('/\.(mp4|webm|ogg)$/i', $fileUrl))
-                                        <video controls style="max-width: 250px;">
-                                            <source src="{{ $fileUrl }}">
+                                    @if(preg_match('/\.(jpg|jpeg|png|gif)$/i', $file))
+                                        <img src="{{ $file }}" class="img-fluid rounded" style="max-width: 150px;">
+                                    @elseif(preg_match('/\.(mp4|webm|ogg)$/i', $file))
+                                        <video controls class="w-100" style="max-width: 200px;">
+                                            <source src="{{ $file }}">
                                         </video>
                                     @else
-                                        <a href="{{ $fileUrl }}" target="_blank">Lihat File</a>
+                                        <a href="{{ $file }}" target="_blank">Lihat File Pasangan {{ $opt }}</a>
                                     @endif
                                 </div>
                             @endif
@@ -108,41 +105,27 @@
 
                     {{-- Jawaban Benar --}}
                     <div class="mb-3">
-                        <label class="form-label">Jawaban Benar</label>
+                        <label for="jawabanBenar" class="form-label">Jawaban Benar</label>
                         @if(Str::startsWith($soal->tipeSoal, 'kinestetik'))
-                            @php
-                                $jawaban = json_decode($soal->jawabanBenar, true) ?? [];
-                            @endphp
-                            @foreach(['A','B','C','D'] as $opt)
-                            <div class="row align-items-center mb-2">
-                                <div class="col-md-2">
-                                    <strong>Opsi {{ $opt }}</strong>
-                                </div>
-                                <div class="col-md-4">
-                                    <select name="jawabanBenar[{{ $opt }}]" class="form-control">
-                                        <option value="">-- Pilih Pasangan --</option>
-                                        @foreach(['A','B','C','D'] as $pas)
-                                            <option value="{{ $pas }}" {{ (isset($jawaban[$opt]) && $jawaban[$opt] == $pas) ? 'selected' : '' }}>
-                                                Pasangan {{ $pas }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            @endforeach
+                            <textarea name="jawabanBenar" class="form-control" rows="2">{{ old('jawabanBenar', $soal->jawabanBenar) }}</textarea>
+                            <small class="form-text text-muted">
+                                Format JSON (misal: {"A":"C","B":"D"}) atau pasangan dipisah koma (misal: A-C,B-D)
+                            </small>
                         @else
                             <select name="jawabanBenar" class="form-control">
-                                @foreach(['A','B','C','D'] as $opt)
-                                <option value="{{ $opt }}" {{ old('jawabanBenar', $soal->jawabanBenar) == $opt ? 'selected' : '' }}>{{ $opt }}</option>
-                                @endforeach
+                                <option value="A" {{ old('jawabanBenar', $soal->jawabanBenar) == 'A' ? 'selected' : '' }}>A</option>
+                                <option value="B" {{ old('jawabanBenar', $soal->jawabanBenar) == 'B' ? 'selected' : '' }}>B</option>
+                                <option value="C" {{ old('jawabanBenar', $soal->jawabanBenar) == 'C' ? 'selected' : '' }}>C</option>
+                                <option value="D" {{ old('jawabanBenar', $soal->jawabanBenar) == 'D' ? 'selected' : '' }}>D</option>
                             </select>
                         @endif
                     </div>
 
-                    {{-- Tombol Submit --}}
+                    {{-- Submit --}}
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-save"></i> Simpan Perubahan
                     </button>
+
                 </form>
             </div>
         </div>
