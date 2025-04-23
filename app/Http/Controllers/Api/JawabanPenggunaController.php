@@ -51,6 +51,9 @@ class JawabanPenggunaController extends Controller
 
     $status = ($request->jawaban_siswa === $soal->jawabanBenar) ? 'benar' : 'salah';
 
+    // Mengambil status jawaban sebelumnya (null jika belum ada jawaban)
+    $jawabanSebelumnya = $jawaban ? $jawaban->status : null;
+
     if ($jawaban) {
         $jawaban->update([
             'jawaban_siswa' => $request->jawaban_siswa,
@@ -65,12 +68,11 @@ class JawabanPenggunaController extends Controller
         ]);
     }
 
-    // ✅ updateSkor dipindah ke luar if else
-    if ($status === 'benar') {
+    // Update skor dan rekap hanya jika sekarang benar dan sebelumnya belum benar
+    if ($status === 'benar' && $jawabanSebelumnya !== 'benar') {
         $this->updateSkor($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeSoal);
+        $this->updateRekap($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeSoal, $status, $jawabanSebelumnya);
     }
-
-    $this->updateRekap($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeSoal, $status);
 
     $rekap = RekapSkorPengguna::where('id_user', $user->id_user)
         ->where('id_mataPelajaran', $id_mataPelajaran)
@@ -84,6 +86,7 @@ class JawabanPenggunaController extends Controller
     ], 200);
 }
 
+    
  
 
     private function updateSkor($userId, $levelId, $mataPelajaranId, $tipeSoal)
@@ -99,7 +102,7 @@ class JawabanPenggunaController extends Controller
 }
 
     
-private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $status)
+private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $status, $jawabanSebelumnya = null)
 {
     $rekap = RekapSkorPengguna::firstOrCreate([
         'id_user' => $userId,
@@ -111,7 +114,10 @@ private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $st
         'total_kinestetik' => 0
     ]);
 
-    if ($status === 'benar') {
+    // Hanya tambahkan jika:
+    // - jawaban sebelumnya NULL (baru pertama kali jawab)
+    // - ATAU jawaban sebelumnya salah, dan sekarang benar
+    if ($status === 'benar' && ($jawabanSebelumnya === null || $jawabanSebelumnya === 'salah')) {
         if ($tipeSoal === 'visual') {
             $rekap->increment('total_visual');
         } elseif ($tipeSoal === 'auditori') {

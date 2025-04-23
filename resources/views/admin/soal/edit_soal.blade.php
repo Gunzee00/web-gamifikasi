@@ -106,20 +106,46 @@
                     {{-- Jawaban Benar --}}
                     <div class="mb-3">
                         <label for="jawabanBenar" class="form-label">Jawaban Benar</label>
-                        @if(Str::startsWith($soal->tipeSoal, 'kinestetik'))
-                            <textarea name="jawabanBenar" class="form-control" rows="2">{{ old('jawabanBenar', $soal->jawabanBenar) }}</textarea>
-                            <small class="form-text text-muted">
-                                Format JSON (misal: {"A":"C","B":"D"}) atau pasangan dipisah koma (misal: A-C,B-D)
-                            </small>
-                        @else
-                            <select name="jawabanBenar" class="form-control">
-                                <option value="A" {{ old('jawabanBenar', $soal->jawabanBenar) == 'A' ? 'selected' : '' }}>A</option>
-                                <option value="B" {{ old('jawabanBenar', $soal->jawabanBenar) == 'B' ? 'selected' : '' }}>B</option>
-                                <option value="C" {{ old('jawabanBenar', $soal->jawabanBenar) == 'C' ? 'selected' : '' }}>C</option>
-                                <option value="D" {{ old('jawabanBenar', $soal->jawabanBenar) == 'D' ? 'selected' : '' }}>D</option>
-                            </select>
-                        @endif
-                    </div>
+                    @php
+    $opsi = ['A', 'B', 'C', 'D'];
+    $pasangan = ['A', 'B', 'C', 'D'];
+    $jawabanBenar = old('jawabanBenar', $soal->jawabanBenar);
+
+    // Parsing jawaban benar dari JSON
+    $jawabanArray = [];
+    if ($jawabanBenar) {
+        if (Str::startsWith($jawabanBenar, '{')) {
+            $jawabanArray = json_decode($jawabanBenar, true);
+        } elseif (strpos($jawabanBenar, '-') !== false) {
+            // Format A-C,B-D
+            foreach (explode(',', $jawabanBenar) as $pair) {
+                [$left, $right] = explode('-', $pair);
+                $jawabanArray[trim($left)] = trim($right);
+            }
+        }
+    }
+@endphp
+
+@foreach($opsi as $item)
+    <div class="row mb-2">
+        <div class="col-md-2">
+            <label class="form-label">Opsi {{ $item }}</label>
+        </div>
+        <div class="col-md-4">
+            <select name="jawabanBenarArray[{{ $item }}]" class="form-control">
+                <option value="">-- Pilih Pasangan --</option>
+                @foreach($pasangan as $p)
+                    <option value="{{ $p }}" {{ (isset($jawabanArray[$item]) && $jawabanArray[$item] == $p) ? 'selected' : '' }}>
+                        {{ $p }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+@endforeach
+
+<input type="hidden" name="jawabanBenar" id="jawabanBenarFinal">
+
 
                     {{-- Submit --}}
                     <button type="submit" class="btn btn-success">

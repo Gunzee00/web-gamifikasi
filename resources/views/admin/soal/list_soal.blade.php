@@ -1,4 +1,7 @@
 @extends('layouts.master')
+
+
+@section('content')
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
         {{ session('success') }}
@@ -6,8 +9,6 @@
     </div>
 @endif
 
-
-@section('content')
 <body class="g-sidenav-show bg-gray-100">
     <div class="min-height-300 bg-dark position-absolute w-100"></div>
     <main class="main-content position-relative border-radius-lg">
