@@ -1,4 +1,11 @@
 @extends('layouts.master')
+@if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
 
 @section('content')
 <body class="g-sidenav-show bg-gray-100">
@@ -188,6 +195,14 @@
                                         <i class="fas fa-edit"></i> Edit Soal
                                     </a>
                                     
+                                       <!-- Tombol Hapus Soal -->
+    <form action="{{ route('soal.destroy', ['id' => $soal->id_soal]) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus soal ini?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">
+            <i class="fas fa-trash-alt"></i> Hapus Soal
+        </button>
+    </form>
                                 </div>
                             </div>
                         </div>

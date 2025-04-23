@@ -187,36 +187,6 @@ class WebSoalController extends Controller
         ]);
     }
     
-
-
-    // public function update(Request $request, $id)
-    // {
-    //     $soal = Soal::findOrFail($id);
-
-    //     $request->validate([
-    //         'pertanyaan' => 'required|string',
-    //         'opsiA' => 'required|string',
-    //         'opsiB' => 'required|string',
-    //         'opsiC' => 'required|string',
-    //         'opsiD' => 'required|string',
-    //         'jawabanBenar' => 'required|in:A,B,C,D',
-    //         'media' => 'nullable|file',
-    //         'audioPertanyaan' => 'nullable|file',
-    //     ]);
-
-    //     if ($request->hasFile('media')) {
-    //         $soal->media = Cloudinary::upload($request->file('media')->getRealPath(), ['folder' => 'soal_media'])->getSecurePath();
-    //     }
-
-    //     if ($request->hasFile('audioPertanyaan')) {
-    //         $soal->audioPertanyaan = Cloudinary::upload($request->file('audioPertanyaan')->getRealPath(), ['folder' => 'soal_audio'])->getSecurePath();
-    //     }
-
-    //     $soal->update($request->only('pertanyaan', 'opsiA', 'opsiB', 'opsiC', 'opsiD', 'jawabanBenar'));
-
-    //     return redirect()->back()->with('success', 'Soal berhasil diperbarui!');
-    // }
-
     public function destroy($id)
     {
         $soal = Soal::findOrFail($id);
