@@ -79,5 +79,5 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     // ============================
     Route::get('/admin/hasilpembelajaran', [WebHasilPembelajaranController::class, 'index'])->name('admin.hasilpembelajaran.index');
     Route::get('/admin/hasilpembelajaran/{id}', [WebHasilPembelajaranController::class, 'show'])->name('admin.hasilpembelajaran.show');
-
+    
 });

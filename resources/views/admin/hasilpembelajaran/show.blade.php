@@ -20,8 +20,6 @@
     {{-- Looping Data Statistik --}}
     @foreach($rekapSkor as $index => $rekap)
     <div class="card shadow-lg p-4 mt-4 border-0">
-        {{-- <h4 class="text-dark">📚 Mata Pelajaran: <span class="text-primary">{{ $rekap->mataPelajaran->nama_mataPelajaran ?? '-' }}</span></h4> --}}
-        {{-- <h5 class="text-muted">🎯 Level: {{ $rekap->level->nama_level ?? '-' }}</h5> --}}
 
         {{-- Diagram Lingkaran --}}
         <div class="text-center">
@@ -30,7 +28,7 @@
 
         {{-- Tipe Dominan --}}
         <div class="mt-4 text-center">
-            <h5 class="fw-bold">🧠 Tipe Dominan: 
+            <h5 class="fw-bold">🧠 Tipe Dominan:
                 @if($rekap->tipe_dominan === 'visual')
                     <span class="badge bg-primary fs-6 px-3 py-2">Visual 🎨</span>
                 @elseif($rekap->tipe_dominan === 'auditory')
