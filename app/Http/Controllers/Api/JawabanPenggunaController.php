@@ -237,6 +237,56 @@ public function getSkorAkhirPerLevel(Request $request)
     ]);
 }
 
+public function getSkorTerbaru(Request $request)
+{
+    $user = Auth::user();
+    if (!$user) {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+
+    // Cari jawaban benar terakhir
+    $jawabanTerakhir = JawabanPengguna::where('id_user', $user->id_user)
+        ->orderByDesc('created_at') // pastikan pakai kolom waktu yang valid
+        ->first();
+
+    if (!$jawabanTerakhir) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Belum ada jawaban pengguna ditemukan.'
+        ], 404);
+    }
+
+    $soal = Soal::find($jawabanTerakhir->id_soal);
+
+    if (!$soal || !$soal->level) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Level dari soal tidak ditemukan.'
+        ], 404);
+    }
+
+    // Hitung ulang jumlah benar dari level itu
+    $jumlahBenar = JawabanPengguna::where('id_user', $user->id_user)
+        ->whereIn('id_soal', function ($query) use ($soal) {
+            $query->select('id_soal')
+                ->from('soal')
+                ->where('id_level', $soal->id_level);
+        })
+        ->where('status', 'benar')
+        ->count();
+
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Skor dari level terakhir yang dikerjakan berhasil diambil.',
+        'data' => [
+            'id_level' => $soal->id_level,
+            'id_mataPelajaran' => $soal->level->id_mataPelajaran,
+            'jumlah_benar' => $jumlahBenar
+        ]
+    ]);
+}
+
+
 
 
 }
