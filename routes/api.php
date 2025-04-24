@@ -86,7 +86,7 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
             //get skor level per level
              Route::get('/skor-akhir-level', [JawabanPenggunaController::class, 'getSkorAkhirPerLevel']);
 
-
+             
         });
 
 }); 

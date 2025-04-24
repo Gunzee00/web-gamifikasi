@@ -6,146 +6,180 @@
     <main class="main-content position-relative border-radius-lg">
         <div class="container-fluid py-4">
             <div class="card p-4">
-                <h4 class="mb-4">Edit Soal - {{ ucfirst($soal->tipeSoal) }}</h4>
-
-                {{-- Error Validation --}}
-                @if($errors->any())
-                    <div class="alert alert-danger">
-                        <ul class="mb-0">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-
-                <form action="{{ route('soal.update', $soal->id_soal) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('soal.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @method('PUT')
+                    <input type="hidden" name="id_level" value="{{ $level->id_level }}">
 
-                    {{-- Hidden --}}
-                    <input type="hidden" name="id_level" value="{{ $soal->id_level }}">
-                    <input type="hidden" name="tipeSoal" value="{{ $soal->tipeSoal }}">
-
-                    {{-- Pertanyaan --}}
                     <div class="mb-3">
-                        <label class="form-label">Pertanyaan</label>
-                        <textarea name="pertanyaan" class="form-control" rows="3">{{ old('pertanyaan', $soal->pertanyaan) }}</textarea>
+                        <label for="pertanyaan" class="form-label">Pertanyaan</label>
+                        <input type="text" name="pertanyaan" class="form-control" required>
                     </div>
 
-                    {{-- Audio Pertanyaan --}}
                     <div class="mb-3">
-                        <label class="form-label">Audio Pertanyaan (Opsional)</label>
-                        <input type="file" class="form-control" name="audioPertanyaan">
-                        @if($soal->audioPertanyaan)
-                            <audio controls class="mt-2" style="width: 250px;">
-                                <source src="{{ $soal->audioPertanyaan }}">
-                            </audio>
-                        @endif
+                        <label for="tipeSoal" class="form-label">Tipe Soal</label>
+                        <select name="tipeSoal" id="tipeSoal" class="form-control" required onchange="toggleFields()">
+                            <option value="visual1">Visual1</option>
+                            <option value="visual2">Visual2</option>
+                            <option value="auditori1">Auditori1</option>
+                            <option value="auditori2">Auditori2</option>
+                            <option value="kinestetik1">Kinestetik1</option>
+                            <option value="kinestetik2">Kinestetik2</option>
+                        </select>
                     </div>
 
-                    {{-- Media --}}
-                    @if(!in_array($soal->tipeSoal, ['kinestetik 1', 'visual 2']))
-                    <div class="mb-3">
-                        <label class="form-label">Media (Opsional)</label>
-                        <input type="file" class="form-control" name="media">
-                        @if($soal->media)
-                            <div class="mt-2">
-                                @if(preg_match('/\.(jpg|jpeg|png|gif)$/i', $soal->media))
-                                    <img src="{{ $soal->media }}" class="img-fluid rounded" style="max-width: 300px;">
-                                @elseif(preg_match('/\.(mp4|webm|ogg)$/i', $soal->media))
-                                    <video controls class="w-100" style="max-width: 400px;">
-                                        <source src="{{ $soal->media }}">
-                                    </video>
-                                @else
-                                    <a href="{{ $soal->media }}" target="_blank">Lihat Media</a>
-                                @endif
-                            </div>
-                        @endif
-                    </div>
-                    @endif
-
-                    {{-- Opsi --}}
+                    {{-- OPSI --}}
                     <div class="mb-3">
                         <label class="form-label">Opsi</label>
                         @foreach(['A','B','C','D'] as $opt)
                         <div class="mt-3 border rounded p-3">
                             <label class="form-label">Opsi {{ $opt }}</label>
-                            <input type="text" name="opsi{{ $opt }}" class="form-control" value="{{ old('opsi'.$opt, $soal->{'opsi'.$opt}) }}">
+                            <select class="form-select mb-2" onchange="toggleInput(this, 'opsi{{ $opt }}')">
+                                <option value="text">Teks</option>
+                                <option value="file">File</option>
+                            </select>
+                            <input type="text" name="opsi{{ $opt }}" id="opsi{{ $opt }}_text" class="form-control opsi-input">
+                            <input type="file" name="opsi{{ $opt }}_file" id="opsi{{ $opt }}_file" class="form-control opsi-input d-none">
                         </div>
                         @endforeach
                     </div>
 
-                    {{-- Pasangan (kinestetik - upload file) --}}
-                    @if(Str::startsWith($soal->tipeSoal, 'kinestetik'))
-                    <div class="mb-3">
-                        <label class="form-label">Pasangan (File per Pasangan)</label>
-                        @foreach(['A','B','C','D'] as $opt)
-                        <div class="mt-3 border rounded p-3">
-                            <label class="form-label">Pasangan {{ $opt }}</label>
-                            <input type="file" name="pasangan{{ $opt }}" class="form-control">
-                            @php
-                                $field = 'pasangan' . $opt;
-                                $fileUrl = $soal->$field;
-                            @endphp
-                            @if($fileUrl)
-                                <div class="mt-2">
-                                    @if(preg_match('/\.(jpg|jpeg|png|gif)$/i', $fileUrl))
-                                        <img src="{{ $fileUrl }}" class="img-fluid" style="max-width: 200px;">
-                                    @elseif(preg_match('/\.(mp4|webm|ogg)$/i', $fileUrl))
-                                        <video controls style="max-width: 250px;">
-                                            <source src="{{ $fileUrl }}">
-                                        </video>
-                                    @else
-                                        <a href="{{ $fileUrl }}" target="_blank">Lihat File</a>
-                                    @endif
-                                </div>
-                            @endif
-                        </div>
-                        @endforeach
-                    </div>
-                    @endif
-
-                    {{-- Jawaban Benar --}}
-                    <div class="mb-3">
-                        <label class="form-label">Jawaban Benar</label>
-                        @if(Str::startsWith($soal->tipeSoal, 'kinestetik'))
-                            @php
-                                $jawaban = json_decode($soal->jawabanBenar, true) ?? [];
-                            @endphp
+                    {{-- PASANGAN --}}
+                    <div id="pasanganFields" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Pasangan</label>
                             @foreach(['A','B','C','D'] as $opt)
-                            <div class="row align-items-center mb-2">
-                                <div class="col-md-2">
-                                    <strong>Opsi {{ $opt }}</strong>
-                                </div>
-                                <div class="col-md-4">
-                                    <select name="jawabanBenar[{{ $opt }}]" class="form-control">
-                                        <option value="">-- Pilih Pasangan --</option>
-                                        @foreach(['A','B','C','D'] as $pas)
-                                            <option value="{{ $pas }}" {{ (isset($jawaban[$opt]) && $jawaban[$opt] == $pas) ? 'selected' : '' }}>
-                                                Pasangan {{ $pas }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                            <div class="mt-3 border rounded p-3">
+                                <label class="form-label">Pasangan {{ $opt }}</label>
+                                <select class="form-select mb-2" onchange="toggleInput(this, 'pasangan{{ $opt }}')">
+                                    <option value="text">Teks</option>
+                                    <option value="file">File</option>
+                                </select>
+                                <input type="text" name="pasangan{{ $opt }}" id="pasangan{{ $opt }}_text" class="form-control pasangan-input">
+                                <input type="file" name="pasangan{{ $opt }}_file" id="pasangan{{ $opt }}_file" class="form-control pasangan-input d-none">
                             </div>
                             @endforeach
-                        @else
-                            <select name="jawabanBenar" class="form-control">
-                                @foreach(['A','B','C','D'] as $opt)
-                                <option value="{{ $opt }}" {{ old('jawabanBenar', $soal->jawabanBenar) == $opt ? 'selected' : '' }}>{{ $opt }}</option>
-                                @endforeach
-                            </select>
-                        @endif
+                        </div>
                     </div>
 
-                    {{-- Tombol Submit --}}
+                    {{-- Jawaban untuk visual & auditori --}}
+                    <div class="mb-3" id="jawabanSingleField">
+                        <label for="jawabanBenar" class="form-label">Jawaban Benar</label>
+                        <select name="jawabanBenar" class="form-control">
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+
+                    {{-- Jawaban kinestetik1 --}}
+                    <div class="mb-3" id="jawabanBenarKinestetik1" style="display: none;">
+                        <label class="form-label">Jawaban Benar (Pasangan Opsi dan Pasangan)</label>
+                        <div class="row">
+                            @foreach(['A','B','C','D'] as $opt)
+                            <div class="col-md-6 mb-2">
+                                <label>Pasangan untuk Opsi {{ $opt }}</label>
+                                <select class="form-control" name="jawaban_pair[{{ $opt }}]">
+                                    <option value="">-- Tidak ada --</option>
+                                    <option value="A">Pasangan A</option>
+                                    <option value="B">Pasangan B</option>
+                                    <option value="C">Pasangan C</option>
+                                    <option value="D">Pasangan D</option>
+                                </select>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Jawaban kinestetik2 --}}
+                    <div class="mb-3" id="jawabanBenarKinestetik2" style="display: none;">
+                        <label for="jawabanBenarText" class="form-label">Jawaban Benar</label>
+                        <input type="text" name="jawabanBenarText" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="media" class="form-label">Media (Opsional)</label>
+                        <input type="file" name="media" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="audioPertanyaan" class="form-label">Audio (Opsional)</label>
+                        <input type="file" name="audioPertanyaan" class="form-control">
+                    </div>
+
                     <button type="submit" class="btn btn-success">
-                        <i class="fas fa-save"></i> Simpan Perubahan
+                        <i class="fas fa-save"></i> Simpan Soal
                     </button>
+                   
                 </form>
             </div>
         </div>
     </main>
+
+    <script>
+        function toggleInput(selectEl, baseId) {
+            const type = selectEl.value;
+            const textInput = document.getElementById(`${baseId}_text`);
+            const fileInput = document.getElementById(`${baseId}_file`);
+            if (type === 'text') {
+                textInput.classList.remove('d-none');
+                fileInput.classList.add('d-none');
+                textInput.name = baseId;
+                fileInput.name = '';
+            } else {
+                textInput.classList.add('d-none');
+                fileInput.classList.remove('d-none');
+                textInput.name = '';
+                fileInput.name = baseId;
+            }
+        }
+
+        function toggleFields() {
+            const tipe = document.getElementById('tipeSoal').value;
+            const pasanganFields = document.getElementById('pasanganFields');
+            const jawabanSingle = document.getElementById('jawabanSingleField');
+            const jawabanKinestetik1 = document.getElementById('jawabanBenarKinestetik1');
+            const jawabanKinestetik2 = document.getElementById('jawabanBenarKinestetik2');
+            const mediaFormGroup = document.querySelector('input[name="media"]').closest('.mb-3');
+            const audioFormGroup = document.querySelector('input[name="audioPertanyaan"]').closest('.mb-3');
+
+            jawabanSingle.style.display = 'none';
+            jawabanKinestetik1.style.display = 'none';
+            jawabanKinestetik2.style.display = 'none';
+            pasanganFields.style.display = 'none';
+            mediaFormGroup.style.display = 'block';
+            audioFormGroup.style.display = 'block';
+
+            ['A','B','C','D'].forEach(opt => {
+                const el = document.querySelector(`[name="opsi${opt}"]`)?.closest('.border');
+                if (el) el.style.display = 'block';
+            });
+
+            if (tipe.startsWith('kinestetik')) {
+                pasanganFields.style.display = 'block';
+
+                if (tipe === 'kinestetik1') {
+                    jawabanKinestetik1.style.display = 'block';
+                    mediaFormGroup.style.display = 'none';
+                } else if (tipe === 'kinestetik2') {
+                    jawabanKinestetik2.style.display = 'block';
+                }
+
+            } else if (tipe === 'visual2' || tipe === 'auditori2') {
+                jawabanSingle.style.display = 'block';
+                mediaFormGroup.style.display = 'none';
+                ['C','D'].forEach(opt => {
+                    const el = document.querySelector(`[name="opsi${opt}"]`)?.closest('.border');
+                    if (el) el.style.display = 'none';
+                });
+            } else {
+                jawabanSingle.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            toggleFields();
+        });
+    </script>
 </body>
 @endsection
