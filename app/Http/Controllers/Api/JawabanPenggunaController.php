@@ -114,21 +114,47 @@ private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $st
         'total_kinestetik' => 0
     ]);
 
-    // Hanya tambahkan jika:
-    // - jawaban sebelumnya NULL (baru pertama kali jawab)
-    // - ATAU jawaban sebelumnya salah, dan sekarang benar
-    if ($status === 'benar' && ($jawabanSebelumnya === null || $jawabanSebelumnya === 'salah')) {
-        if ($tipeSoal === 'visual') {
-            $rekap->increment('total_visual');
-        } elseif ($tipeSoal === 'auditori') {
-            $rekap->increment('total_auditori');
-        } elseif ($tipeSoal === 'kinestetik') {
-            $rekap->increment('total_kinestetik');
+    // Ambil semua jawaban BENAR di level ini oleh user
+    $jawabanBenar = JawabanPengguna::where('id_user', $userId)
+        ->whereIn('id_soal', function ($query) use ($levelId) {
+            $query->select('id_soal')->from('soal')->where('id_level', $levelId);
+        })
+        ->where('status', 'benar')
+        ->get();
+
+    // Hitung ulang jumlah benar per tipe soal
+    $totalVisualBaru = 0;
+    $totalAuditoriBaru = 0;
+    $totalKinestetikBaru = 0;
+
+    foreach ($jawabanBenar as $jawaban) {
+        $soal = Soal::find($jawaban->id_soal);
+        if (!$soal) continue;
+
+        $tipe = strtolower($soal->tipeSoal);
+        if (str_contains($tipe, 'visual')) {
+            $totalVisualBaru++;
+        } elseif (str_contains($tipe, 'auditori')) {
+            $totalAuditoriBaru++;
+        } elseif (str_contains($tipe, 'kinestetik')) {
+            $totalKinestetikBaru++;
         }
+    }
+
+    // Hitung total skor lama dan skor baru
+    $totalSebelumnya = $rekap->total_visual + $rekap->total_auditori + $rekap->total_kinestetik;
+    $totalBaru = $totalVisualBaru + $totalAuditoriBaru + $totalKinestetikBaru;
+
+    // Hanya update jika skor baru lebih tinggi
+    if ($totalBaru > $totalSebelumnya) {
+        $rekap->update([
+            'total_visual' => $totalVisualBaru,
+            'total_auditori' => $totalAuditoriBaru,
+            'total_kinestetik' => $totalKinestetikBaru,
+        ]);
     }
 }
 
-    
 
     //cek kelulusan
     
