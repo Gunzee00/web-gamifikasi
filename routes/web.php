@@ -71,7 +71,7 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     // Untuk melihat soal berdasarkan level
     Route::get('/level/{id}/soal', [WebSoalController::class, 'showSoal'])->name('admin.level.show_soal');
 
-    // Untuk melihat level berdasarkan mata pelajaran
+    // Untuk melihat level berdasarkan mata pelajaran   
     Route::get('/matapelajaran/{id}/levels', [WebSoalController::class, 'showLevels'])->name('admin.matapelajaran.show_levels');
 
     // ============================

@@ -98,7 +98,7 @@ class WebSoalController extends Controller
             'jawabanBenar' => $jawabanBenar,
         ]);
     
-        return redirect()->route('soal.list', ['id' => $soal['id_level']])
+        return redirect()->route('admin.level.show_soal', ['id' => $soal['id_level']])
             ->with('success', 'Soal berhasil disimpan!');
     }
     
