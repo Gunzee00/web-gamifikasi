@@ -101,7 +101,7 @@ class JawabanPenggunaController extends Controller
     ]);
 }
 
-    
+
 private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $status, $jawabanSebelumnya = null)
 {
     $rekap = RekapSkorPengguna::firstOrCreate([
@@ -154,7 +154,6 @@ private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $st
         ]);
     }
 }
-
 
     //cek kelulusan
     
@@ -227,38 +226,48 @@ public function getSkorAkhir()
 public function getSkorAkhirPerLevel(Request $request)
 {
     $user = Auth::user();
-
     if (!$user) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'User tidak ditemukan.'
-        ], 401);
+        return response()->json(['message' => 'Unauthorized'], 401);
     }
 
-    $request->validate([
-        'id_mataPelajaran' => 'required|integer',
-        'id_level' => 'required|integer',
-    ]);
-
-    $rekap = RekapSkorPengguna::where('id_user', $user->id_user)
-        ->where('id_mataPelajaran', $request->id_mataPelajaran)
-        ->where('id_level', $request->id_level)
+    // Ambil soal terakhir yang dijawab user
+    $jawabanTerakhir = JawabanPengguna::where('id_user', $user->id_user)
+        ->orderByDesc('created_at')
         ->first();
 
-    if (!$rekap) {
+    if (!$jawabanTerakhir) {
         return response()->json([
-            'status' => 'error',
-            'message' => 'Rekap skor tidak ditemukan untuk level dan mata pelajaran tersebut.',
+            'status' => 'failed',
+            'message' => 'Belum ada jawaban pengguna ditemukan.'
         ], 404);
     }
 
+    $soal = Soal::find($jawabanTerakhir->id_soal);
+
+    if (!$soal || !$soal->id_level) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Level dari soal tidak ditemukan.'
+        ], 404);
+    }
+
+    // Hitung semua jawaban benar pada level tersebut
+    $jumlahBenar = JawabanPengguna::where('id_user', $user->id_user)
+        ->whereIn('id_soal', function ($query) use ($soal) {
+            $query->select('id_soal')
+                ->from('soal')
+                ->where('id_level', $soal->id_level);
+        })
+        ->where('status', 'benar')
+        ->count();
+
     return response()->json([
         'status' => 'success',
-        'message' => 'Skor akhir berhasil diambil.',
+        'message' => 'Jumlah jawaban benar dari level terakhir berhasil dihitung.',
         'data' => [
-            'total_visual' => $rekap->total_visual,
-            'total_auditori' => $rekap->total_auditori,
-            'total_kinestetik' => $rekap->total_kinestetik
+            'id_level' => $soal->id_level,
+            'id_mataPelajaran' => $soal->level->id_mataPelajaran ?? null,
+            'jumlah_benar' => $jumlahBenar
         ]
     ]);
 }
@@ -311,8 +320,5 @@ public function getSkorTerbaru(Request $request)
         ]
     ]);
 }
-
-
-
 
 }

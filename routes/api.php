@@ -79,13 +79,15 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
              //cek kelulusan
              Route::post('/cek-kelulusan-level', [JawabanPenggunaController::class, 'cekKelulusanLevel']);
             //  skor terbaru
-             Route::middleware('auth:api')->get('/skor-terbaru', [JawabanPenggunaController::class, 'getSkorTerbaru']);
+            Route::middleware('auth:api')->get('/skor-terbaru', [JawabanPenggunaController::class, 'getSkorTerbaru']);
              //skor setelah mengerjakan soal
              Route::get('/skor-akhir', [JawabanPenggunaController::class, 'getSkorAkhir']);
 
 
             //get skor level per level
              Route::get('/skor-akhir-level', [JawabanPenggunaController::class, 'getSkorAkhirPerLevel']);
+             //Route::middleware('auth:sanctum')->get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);
+             Route::get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);
 
              
         });
