@@ -87,7 +87,7 @@ public function logout(Request $request)
             'role' => 'required|in:admin', // Role hanya bisa admin
             'name' => 'required|string|max:255',
             'gender' => 'required|in:laki-laki,perempuan',
-'tanggal_lahir' => 'required|date', // Menambahkan validasi tanggal lahir
+       'tanggal_lahir' => 'required|date', // Menambahkan validasi tanggal lahir
         ]);
         
         // Hanya super admin yang dapat mendaftarkan admin

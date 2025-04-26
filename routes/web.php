@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\WebAuthController;
 use App\Http\Controllers\Web\WebLevelController;
 use App\Http\Controllers\Web\WebMataPelajaranController;
+use App\Http\Controllers\Web\WebSuperAdminAuthController;
 use App\Http\Controllers\Web\WebSoalController;
 use App\Http\Controllers\Web\WebHasilPembelajaranController;
 
@@ -21,10 +22,25 @@ Route::post('/register', [WebAuthController::class, 'register']);
 // ============================
 // Route for Super Admin
 // ============================
-Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
-    Route::get('/admin/register', [WebAuthController::class, 'showRegistrationForm'])->name('super_admin.registration_admin');
-    Route::post('/admin/register', [WebAuthController::class, 'registerAdmin'])->name('admin.register');
+
+Route::middleware(['auth:sanctum', 'role:super_admin'])->prefix('admin')->group(function () {
+    // Form dan proses registrasi admin
+    Route::get('/register', [WebSuperAdminAuthController::class, 'showRegistrationForm'])->name('super_admin.registration_admin');
+    Route::post('/register', [WebSuperAdminAuthController::class, 'registerAdmin'])->name('admin.register');
+
+    // Manajemen akun user dan admin
+    Route::get('/super-admin/manajemen-akun', [WebSuperAdminAuthController::class, 'manajemenAkun'])->name('super_admin.manajemen_akun');
+
+    Route::get('/users', [WebSuperAdminAuthController::class, 'listUsers'])->name('super_admin.list_users');
+    Route::get('/users/{id}/edit', [WebSuperAdminAuthController::class, 'editUser'])->name('super_admin.edit_user');
+    Route::put('/users/{id}', [WebSuperAdminAuthController::class, 'updateUser'])->name('super_admin.update_user');
+    Route::delete('/users/{id}', [WebSuperAdminAuthController::class, 'deleteUser'])->name('super_admin.delete_user');
+    Route::get('/super-admin/akun/{id}/edit', [WebSuperAdminAuthController::class, 'editUser'])->name('super_admin.edit_user');
+Route::put('/super-admin/akun/{id}', [WebSuperAdminAuthController::class, 'updateUser'])->name('super_admin.update_user');
+Route::get('/super-admin/users', [WebSuperAdminAuthController::class, 'listUsers'])->name('super_admin.list_users');
+
 });
+
 
 // ============================
 // Route for Admin & Super Admin
