@@ -14,146 +14,9 @@ use Illuminate\Support\Facades\DB; // tambahkan di atas jika belum
 
 class JawabanPenggunaController extends Controller
 {
-//     public function simpanJawaban(Request $request)
-// {
-//     \Log::info('User Auth:', ['user' => Auth::user()]);
 
-//     if (!Auth::user()) {
-//         return response()->json(['message' => 'User tidak ditemukan.'], 401);
-//     }
-
-//     $user = Auth::user();
-//     $soal = Soal::find($request->id_soal);
-
-//     if (!$soal) {
-//         return response()->json(['message' => 'Soal tidak ditemukan.'], 404);
-//     }
-
-//     if (!$soal->level || !$soal->level->mataPelajaran) {
-//         return response()->json(['message' => 'Mata Pelajaran tidak ditemukan dalam soal.'], 404);
-//     }
-
-//     $id_mataPelajaran = $soal->level->id_mataPelajaran;
-
-//     // Mapping tipeSoal
-//     $tipeSoalOriginal = strtolower($soal->tipeSoal);
-//     $tipeSoal = match (true) {
-//         str_contains($tipeSoalOriginal, 'visual') => 'visual',
-//         str_contains($tipeSoalOriginal, 'auditori') => 'auditori',
-//         str_contains($tipeSoalOriginal, 'kinestetik') => 'kinestetik',
-//         default => $tipeSoalOriginal,
-//     };
-
-//     // Cek apakah user sudah menjawab soal ini sebelumnya
-//     $jawaban = JawabanPengguna::where('id_user', $user->id_user)
-//         ->where('id_soal', $soal->id_soal)
-//         ->first();
-
-//     $status = ($request->jawaban_siswa === $soal->jawabanBenar) ? 'benar' : 'salah';
-
-//     // Mengambil status jawaban sebelumnya (null jika belum ada jawaban)
-//     $jawabanSebelumnya = $jawaban ? $jawaban->status : null;
-
-//     if ($jawaban) {
-//         $jawaban->update([
-//             'jawaban_siswa' => $request->jawaban_siswa,
-//             'status' => $status
-//         ]);
-//     } else {
-//         $jawaban = JawabanPengguna::create([
-//             'id_user' => $user->id_user,
-//             'id_soal' => $soal->id_soal,
-//             'jawaban_siswa' => $request->jawaban_siswa,
-//             'status' => $status
-//         ]);
-//     }
-
-//     // Update skor dan rekap hanya jika sekarang benar dan sebelumnya belum benar
-//     if ($status === 'benar' && $jawabanSebelumnya !== 'benar') {
-//         $this->updateSkor($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeSoal);
-//         $this->updateRekap($user->id_user, $soal->id_level, $id_mataPelajaran, $tipeSoal, $status, $jawabanSebelumnya);
-//     }
-
-//     $rekap = RekapSkorPengguna::where('id_user', $user->id_user)
-//         ->where('id_mataPelajaran', $id_mataPelajaran)
-//         ->where('id_level', $soal->id_level)
-//         ->first();
-
-//     return response()->json([
-//         'message' => 'Jawaban disimpan dan rekap skor diperbarui',
-//         'jawaban' => $jawaban,
-//         'rekap' => $rekap
-//     ], 200);
-// }
-
-    
  
 
-    private function updateSkor($userId, $levelId, $mataPelajaranId, $tipeSoal)
-{
-    // Tambah entri baru setiap kali menjawab benar
-    SkorPengguna::create([
-        'id_user' => $userId,
-        'id_mataPelajaran' => $mataPelajaranId,
-        'id_level' => $levelId,
-        'tipeSoal' => $tipeSoal,
-        'jumlah_benar' => 1
-    ]);
-}
-
-
-// private function updateRekap($userId, $levelId, $mataPelajaranId, $tipeSoal, $status, $jawabanSebelumnya = null)
-// {
-//     $rekap = RekapSkorPengguna::firstOrCreate([
-//         'id_user' => $userId,
-//         'id_mataPelajaran' => $mataPelajaranId,
-//         'id_level' => $levelId
-//     ], [
-//         'total_visual' => 0,
-//         'total_auditori' => 0,
-//         'total_kinestetik' => 0
-//     ]);
-
-//     // Ambil semua jawaban BENAR di level ini oleh user
-//     $jawabanBenar = JawabanPengguna::where('id_user', $userId)
-//         ->whereIn('id_soal', function ($query) use ($levelId) {
-//             $query->select('id_soal')->from('soal')->where('id_level', $levelId);
-//         })
-//         ->where('status', 'benar')
-//         ->get();
-
-//     // Hitung ulang jumlah benar per tipe soal
-//     $totalVisualBaru = 0;
-//     $totalAuditoriBaru = 0;
-//     $totalKinestetikBaru = 0;
-
-//     foreach ($jawabanBenar as $jawaban) {
-//         $soal = Soal::find($jawaban->id_soal);
-//         if (!$soal) continue;
-
-//         $tipe = strtolower($soal->tipeSoal);
-//         if (str_contains($tipe, 'visual')) {
-//             $totalVisualBaru++;
-//         } elseif (str_contains($tipe, 'auditori')) {
-//             $totalAuditoriBaru++;
-//         } elseif (str_contains($tipe, 'kinestetik')) {
-//             $totalKinestetikBaru++;
-//         }
-//     }
-
-//     // Hitung total skor lama dan skor baru
-//     $totalSebelumnya = $rekap->total_visual + $rekap->total_auditori + $rekap->total_kinestetik;
-//     $totalBaru = $totalVisualBaru + $totalAuditoriBaru + $totalKinestetikBaru;
-
-//     // Hanya update jika skor baru lebih tinggi
-//     if ($totalBaru > $totalSebelumnya) {
-//         $rekap->update([
-//             'total_visual' => $totalVisualBaru,
-//             'total_auditori' => $totalAuditoriBaru,
-//             'total_kinestetik' => $totalKinestetikBaru,
-//         ]);
-//     }
-// }
 
 public function simpanJawaban(Request $request)
     {
@@ -276,35 +139,39 @@ public function simpanJawaban(Request $request)
     //cek kelulusan
     
     public function cekKelulusanLevel(Request $request)
-{
-    $request->validate([
-        'id_user' => 'required|integer',
-        'id_mataPelajaran' => 'required|integer',
-        'id_level' => 'required|integer',
-    ]);
-
-    $jumlahBenar = SkorPengguna::where('id_user', $request->id_user)
-        ->where('id_mataPelajaran', $request->id_mataPelajaran)
-        ->where('id_level', $request->id_level)
-        ->sum('jumlah_benar');
-
-    if ($jumlahBenar >= 3) {
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Kamu bisa lanjut ke level berikutnya.',
-            'boleh_lanjut' => true,
-            'jumlah_benar' => $jumlahBenar
+    {
+        $request->validate([
+            'id_user' => 'required|integer',
+            'id_mataPelajaran' => 'required|integer',
+            'id_level' => 'required|integer',
         ]);
-    } else {
-        return response()->json([
-            'status' => 'failed',
-            'message' => 'Minimal 3 soal benar untuk bisa lanjut ke level berikutnya.',
-            'boleh_lanjut' => false,
-            'jumlah_benar' => $jumlahBenar
-        ]);
+    
+        // Cari semua soal di level ini
+        $soalIds = Soal::where('id_level', $request->id_level)->pluck('id_soal');
+    
+        // Hitung jumlah jawaban benar user di soal-soal tersebut
+        $jumlahBenar = JawabanPengguna::where('id_user', $request->id_user)
+            ->whereIn('id_soal', $soalIds)
+            ->where('status', 'benar')
+            ->count();
+    
+        if ($jumlahBenar >= 3) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Kamu bisa lanjut ke level berikutnya.',
+                'boleh_lanjut' => true,
+                'jumlah_benar' => $jumlahBenar
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Minimal 3 soal benar untuk bisa lanjut ke level berikutnya.',
+                'boleh_lanjut' => false,
+                'jumlah_benar' => $jumlahBenar
+            ]);
+        }
     }
-}
- 
+    
 public function getSkorAkhir()
 {
     $user = Auth::user();
