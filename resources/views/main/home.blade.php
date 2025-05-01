@@ -10,7 +10,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                      <h6 class="card-title text-uppercase mb-2">Total User</h6>
-                     <p class="h4 font-weight-bold">{{ $totalUsers }}</p>
+                     {{-- <p class="h4 font-weight-bold">{{ $totalUsers }}</p> --}}
                      <p class="text-muted">Total user yang terdaftar </p>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                         <i class="fas fa-book"></i>
                     </div>
                      <h6 class="card-title text-uppercase mb-2">Total Mata Pelajaran</h6>
-                     <p class="h4 font-weight-bold">{{ $totalMatapelajaran }}</p>
+                     {{-- <p class="h4 font-weight-bold">{{ $totalMatapelajaran }}</p> --}}
                      <p class="text-muted">Total mata pelajaran yang tersedia</p>
                 </div>
             </div>

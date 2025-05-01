@@ -13,14 +13,14 @@ class WebDashboardController extends Controller
     public function index()
     {
         // Menghitung total user
-        $totalUsers = User::count(); 
+        // $totalUsers = User::count(); 
         // Menghitung jumlah mata pelajaran
-        $totalMatapelajaran = Matapelajaran::count(); 
+        // $totalMatapelajaran = Matapelajaran::count(); 
 
         return view('main.home', [
             'title' => 'Dashboard',
-            'totalUsers' => $totalUsers,  
-            'totalMatapelajaran' => $totalMatapelajaran, 
+            // 'totalUsers' => $totalUsers,  
+            // 'totalMatapelajaran' => $totalMatapelajaran, 
         ]);
     }
 }
