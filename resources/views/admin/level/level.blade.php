@@ -8,7 +8,6 @@
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="row">
                         <div class="col-12">
-                            <!-- Form -->
                             <div class="card mb-4" id="formCard">
                                 <div class="card-header pb-0">
                                     <h6>Tambah Level</h6>
@@ -61,8 +60,6 @@
                                     </form>
                                 </div>
                             </div>
-
-                            <!-- Tombol Filter Mata Pelajaran -->
                             <div class="card mb-4">
                                 <div class="card-header pb-0">
                                     <h6>Pilih Mata Pelajaran</h6>

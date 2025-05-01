@@ -43,8 +43,6 @@
     </div>
     @endforeach
 </div>
-
-{{-- Tambahkan Chart.js --}}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {

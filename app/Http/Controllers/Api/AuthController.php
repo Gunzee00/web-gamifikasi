@@ -9,7 +9,7 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-    // Register User
+    // Registerasi User
     public function register(Request $request)
     {
         $request->validate([
@@ -77,7 +77,7 @@ class AuthController extends Controller
         ]);
     }
 
-    // Get Authenticated User Data
+    // Data User
     public function me(Request $request)
     {
         return response()->json([
@@ -90,6 +90,7 @@ class AuthController extends Controller
         ]);
     }
 
+    //Lupa Password
     public function lupaPassword(Request $request)
 {
     $request->validate([

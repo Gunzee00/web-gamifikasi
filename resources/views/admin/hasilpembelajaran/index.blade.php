@@ -2,14 +2,11 @@
 
 @section('content')
 <div class="container">
-    {{-- <h2 class="mt-4 text-center font-weight-bold text-primary"> Hasil Pembelajaran</h2> --}}
-
     <div class="row mt-4">
         @foreach($users as $index => $user)
         <div class="col-md-6">
             <a href="{{ route('admin.hasilpembelajaran.show', $user->id_user) }}" class="card user-card shadow-sm p-3 mb-3 border-0">
                 <div class="d-flex align-items-center">
-                    <!-- Avatar User -->
                     <div class="avatar bg-gradient-primary text-white d-flex align-items-center justify-content-center">
                         {{ strtoupper(substr($user->name, 0, 1)) }}
                     </div>

@@ -18,10 +18,7 @@ class MataPelajaran extends Model
     protected $hidden = ['created_at', 'updated_at'];
 
 
-    /**
-     * Relasi ke model Level.
-     * Satu mata pelajaran bisa memiliki banyak level.
-     */
+    //matapelajaran one to many
     public function levels()
     {
         return $this->hasMany(Level::class, 'id_mataPelajaran', 'id_mataPelajaran');

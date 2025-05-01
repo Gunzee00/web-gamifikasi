@@ -19,17 +19,16 @@ class WebHasilPembelajaranController extends Controller
         ]);
     }
 
+    //statistik
     public function show($id)
     {
         $user = User::where('role', 'user')->findOrFail($id);
         $rekapSkor = RekapSkorPengguna::where('id_user', $id)->get();
-    
-        // Hitung tipe dominan untuk tiap rekap
+ 
         foreach ($rekapSkor as $rekap) {
             $tipe_dominan = 'Tidak Ada';
             $maxSkor = max($rekap->total_visual, $rekap->total_auditory, $rekap->total_kinestetik);
         
-            // Tentukan tipe dominan berdasarkan skor tertinggi
             if ($maxSkor > 0) {
                 if ($rekap->total_visual == $maxSkor) {
                     $tipe_dominan = 'visual';
@@ -57,10 +56,8 @@ class WebHasilPembelajaranController extends Controller
         $rekapSkor = RekapSkorPengguna::where('id_user', $userId)->get();
     
         foreach ($rekapSkor as $rekap) {
-            // Menentukan skor tertinggi
             $maxSkor = max($rekap->total_visual, $rekap->total_auditory, $rekap->total_kinestetik);
-    
-            // Menentukan tipe dominan
+            //menentukan tipe dominan
             if ($maxSkor <= 0) {
                 $rekap->tipe_dominan = 'Tidak Ada';
             } elseif ($rekap->total_visual == $maxSkor) {

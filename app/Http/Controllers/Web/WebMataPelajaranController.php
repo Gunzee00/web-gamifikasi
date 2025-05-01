@@ -9,21 +9,17 @@ use Illuminate\Validation\Rule;
 
 class WebMataPelajaranController extends Controller
 {
-    /**
-     * Menampilkan halaman utama dengan data subjek.
-     */
+   //Menampilkan halaman utama dengan data subjek.
     public function index()
     {
         $matapelajaran = MataPelajaran::all();  
         return view('admin.matapelajaran.index', [
             'title' => 'Mata Pelajaran',
-            'matapelajaran' => $matapelajaran, // Kirim data ke view
+            'matapelajaran' => $matapelajaran,  
         ]);
     }
     
-    /**
-     * Menyimpan subjek baru.
-     */
+  //Menyimpan subjek baru.
     
     public function store(Request $request)
     {
@@ -39,9 +35,7 @@ class WebMataPelajaranController extends Controller
         return redirect()->back()->with('success', 'Mata Pelajaran berhasil ditambahkan.');
     }
 
-    /**
-     * Memperbarui mata pelajaran.
-     */
+   //Memperbarui mata pelajaran.
     public function update(Request $request, $id)
     {
        $matapelajaran = MataPelajaran::findOrFail($id);
@@ -63,9 +57,7 @@ class WebMataPelajaranController extends Controller
         return redirect()->back()->with('success', 'Nama mata pelajaran berhasil diperbarui.');
     }
 
-    /**
-     * Menghapus Mata Pelajaran.
-     */
+   // Menghapus Mata Pelajaran.
     public function destroy($id)
     {
        $matapelajaran = MataPelajaran::findOrFail($id);

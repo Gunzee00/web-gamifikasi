@@ -15,7 +15,6 @@ class WebLevelController extends Controller
     
     $query = Level::with('mataPelajaran');
 
-    // Cek apakah ada filter
     if ($request->has('id_mataPelajaran') && $request->id_mataPelajaran != '') {
         $query->where('id_mataPelajaran', $request->id_mataPelajaran);
     }
@@ -26,7 +25,7 @@ class WebLevelController extends Controller
         'title' => 'Web Level',
         'levels' => $levels,
         'mataPelajaran' => $mataPelajaran,
-        'selectedMataPelajaran' => $request->id_mataPelajaran // untuk menandai tombol aktif
+        'selectedMataPelajaran' => $request->id_mataPelajaran 
     ]);
 }   
 
@@ -78,7 +77,7 @@ public function update(Request $request, $id)
                 ->where(function ($query) use ($request) {
                     return $query->where('id_mataPelajaran', $request->id_mataPelajaran);
                 })
-                ->ignore($id, 'id_level') // agar tidak konflik dengan dirinya sendiri saat edit
+                ->ignore($id, 'id_level') 
         ],
     ]);
 
@@ -106,7 +105,7 @@ public function update(Request $request, $id)
                        ->with('mataPelajaran')
                        ->get();
     
-        return response()->json(['levels' => $levels]); // Bungkus dalam array levels
+        return response()->json(['levels' => $levels]); 
     }
     
 }

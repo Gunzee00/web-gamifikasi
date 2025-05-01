@@ -10,7 +10,7 @@ class Soal extends Model
     use HasFactory;
 
     protected $table = 'soal';
-    protected $primaryKey = 'id_soal'; // Ubah primary key sesuai dengan nama di tabel
+    protected $primaryKey = 'id_soal';  
 
 
     protected $fillable = [

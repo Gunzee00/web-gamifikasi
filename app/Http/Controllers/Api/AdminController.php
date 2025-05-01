@@ -11,19 +11,18 @@ class AdminController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum'); // Memastikan hanya user yang login bisa mengakses
+        $this->middleware('auth:sanctum');
     }
 
     public function registerAdmin(Request $request)
     {
-        // Pastikan yang bisa mendaftarkan admin hanya super_admin
+        // Memastikan yang bisa mendaftarkan admin hanya super_admin
         if (auth()->user()->role !== 'super_admin') {
             return response()->json([
                 'message' => 'Anda tidak memiliki izin untuk mendaftarkan admin.'
             ], 403);
         }
-
-        // Validasi data input
+ 
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
@@ -31,9 +30,9 @@ class AdminController extends Controller
             'gender' => 'required|in:laki-laki,perempuan',
         ]);
 
-        // Buat akun admin
+ 
         $admin = User::create([
-            'role' => 'admin', // Role di-set otomatis sebagai admin
+            'role' => 'admin',  
             'name' => $request->name,
             'username' => $request->username,
             'password' => Hash::make($request->password),

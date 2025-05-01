@@ -10,9 +10,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class SoalController extends Controller
 {
-    /**
-     * Menampilkan semua data soal.
-     */
+     
   // Menampilkan semua soal
   public function index()
   {
@@ -24,6 +22,7 @@ class SoalController extends Controller
       ], 200);
   }
 
+  //get matapelajaran by level
   public function getByMataPelajaranAndLevel($id_mataPelajaran, $id_level)
   {
       $level = Level::where('id_mataPelajaran', $id_mataPelajaran)
@@ -83,11 +82,7 @@ class SoalController extends Controller
     ], 200);
 }
 
-  //
-
-    /**
-     * Menyimpan soal baru dengan media dan audio ke Cloudinary.
-     */
+  //Menyimpan soal 
   
     public function store(Request $request)
 {
@@ -99,7 +94,7 @@ class SoalController extends Controller
         'jawabanBenar' => 'nullable|string'
     ]);
 
-    // Fungsi reusable: jika file, upload ke Cloudinary. Jika teks, ambil langsung.
+   //penggunaan cloudinary
     $uploadOrText = function ($name, $folder) use ($request) {
         if ($request->hasFile($name)) {
             return Cloudinary::upload($request->file($name)->getRealPath(), [
@@ -110,8 +105,7 @@ class SoalController extends Controller
             return $request->input($name); // Ambil teks jika bukan file
         }
     };
-
-    // Proses semua kolom yang bisa teks/file
+ 
     $audioPertanyaan = $uploadOrText('audioPertanyaan', 'soal/audio');
     $media           = $uploadOrText('media', 'soal/media');
 
@@ -125,7 +119,7 @@ class SoalController extends Controller
     $pasanganC = $uploadOrText('pasanganC', 'soal/pasangan');
     $pasanganD = $uploadOrText('pasanganD', 'soal/pasangan');
 
-    // Simpan data ke database
+ 
     $soal = Soal::create([
         'id_level' => $request->id_level,
         'tipeSoal' => $request->tipeSoal,

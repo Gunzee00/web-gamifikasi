@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\WebMataPelajaranController;
 use App\Http\Controllers\Web\WebSuperAdminAuthController;
 use App\Http\Controllers\Web\WebSoalController;
 use App\Http\Controllers\Web\WebHasilPembelajaranController;
+use App\Http\Controllers\Web\WebDashboardController;
 
 // ============================
 // Auth & Register
@@ -42,38 +43,39 @@ Route::get('/super-admin/users', [WebSuperAdminAuthController::class, 'listUsers
 });
 
 
-// ============================
+ 
 // Route for Admin & Super Admin
-// ============================
+ 
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
+    //dashboard
+
+    Route::get('/dashboard', [WebDashboardController::class, 'index'])->name('main.home');
 
     Route::get('/home', [WebAuthController::class, 'home'])->name('home');
 
     // Logout
     Route::post('/logout', [WebAuthController::class, 'logout'])->name('logout');
 
-    // ============================
+ 
     // Level Management
-    // ============================
     Route::get('/admin/levels', [WebLevelController::class, 'index'])->name('admin.levels.index');
     Route::post('/admin/levels', [WebLevelController::class, 'store'])->name('admin.levels.store');
     Route::put('/admin/levels/{id}', [WebLevelController::class, 'update'])->name('admin.levels.update');
     Route::delete('/admin/levels/{id}', [WebLevelController::class, 'destroy'])->name('admin.levels.destroy');
-
     Route::get('/admin/levels/filter/{id_mataPelajaran}', [WebLevelController::class, 'filter'])->name('admin.levels.filter');
     Route::get('/admin/levels/mata-pelajaran/{id_mataPelajaran}', [WebLevelController::class, 'getLevelsByMataPelajaran']);
 
-    // ============================
+ 
     // Mata Pelajaran
-    // ============================
+ 
     Route::get('/matapelajaran', [WebMataPelajaranController::class, 'index'])->name('admin.matapelajaran.index');
     Route::post('/matapelajaran', [WebMataPelajaranController::class, 'store'])->name('admin.matapelajaran.store');
     Route::put('/matapelajaran/{id}', [WebMataPelajaranController::class, 'update'])->name('admin.matapelajaran.update');
     Route::delete('/matapelajaran/{id}', [WebMataPelajaranController::class, 'destroy'])->name('admin.matapelajaran.destroy');
 
-    // ============================
+ 
     // Soal Management
-    // ============================
+ 
     Route::get('/soal', [WebSoalController::class, 'index'])->name('admin.soal.index');
     Route::get('/soal/create/{id_level}', [WebSoalController::class, 'create'])->name('soal.create');
     Route::post('/soal/store', [WebSoalController::class, 'store'])->name('soal.store');
@@ -90,9 +92,9 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     // Untuk melihat level berdasarkan mata pelajaran   
     Route::get('/matapelajaran/{id}/levels', [WebSoalController::class, 'showLevels'])->name('admin.matapelajaran.show_levels');
 
-    // ============================
+
     // Hasil Pembelajaran
-    // ============================
+
     Route::get('/admin/hasilpembelajaran', [WebHasilPembelajaranController::class, 'index'])->name('admin.hasilpembelajaran.index');
     Route::get('/admin/hasilpembelajaran/{id}', [WebHasilPembelajaranController::class, 'show'])->name('admin.hasilpembelajaran.show');
     

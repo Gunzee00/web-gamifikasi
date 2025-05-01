@@ -76,9 +76,7 @@ class MataPelajaranController extends Controller
         ], 200);
     }
 
-    /**
-     * Menghapus subjek dari database.
-     */
+    //Menghapus subjek dari database.
     public function destroy(MataPelajaran $matapelajaran)
     {
         // Menghapus subjek
@@ -90,9 +88,7 @@ class MataPelajaranController extends Controller
         ], 204);
     }
 
-    /**
-     * Mendapatkan data user yang terautentikasi.
-     */
+   //Mendapatkan data user yang terautentikasi.
     public function authenticatedUser(Request $request)
     {
         // Mengembalikan data user yang terautentikasi

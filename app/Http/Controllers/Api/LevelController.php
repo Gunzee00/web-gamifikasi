@@ -10,9 +10,7 @@ use Illuminate\Validation\Rule;
 
 class LevelController extends Controller
 {
-    /**
-     * Constructor dengan middleware untuk akses terbatas.
-     */
+   
     public function __construct()
     {
         // Hanya admin dan super_admin yang boleh membuat data level
@@ -20,18 +18,14 @@ class LevelController extends Controller
         $this->middleware('role:admin,super_admin')->only(['store']);
     }
 
-    /**
-     * Menampilkan semua data level.
-     */
+    // Menampilkan semua data level.
     public function index()
     {
         $levels = Level::with('mataPelajaran')->get();
         return response()->json($levels, 200);
     }
 
-    /**
-     * Membuat data level baru.
-     */
+    //Membuat data level baru.
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -47,17 +41,13 @@ class LevelController extends Controller
         ], 201);
     }
 
-    /**
-     * Menampilkan detail level tertentu.
-     */
+    //Menampilkan detail level tertentu.
     public function show(Level $level)
     {
         return response()->json($level, 200);
     }
 
-    /**
-     * Mengupdate data level.
-     */
+    //Mengupdate data level.
     public function update(Request $request, Level $level)
     {
         $validated = $request->validate([
@@ -73,9 +63,7 @@ class LevelController extends Controller
         ], 200);
     }
 
-    /**
-     * Menghapus data level.
-     */
+   //Menghapus data level.
     public function destroy(Level $level)
     {
         $level->delete();

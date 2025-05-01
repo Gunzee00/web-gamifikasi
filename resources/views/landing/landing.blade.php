@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang ="en">
 
-    <!-- Head berfungsi menyimpan metadata -->
-    <!-- Menyimpan link relation seperti css dan javascript -->
+ 
     <head>
         <meta charset="UTF-8">
         <meta name="author" content="Ray Siagian">
@@ -12,14 +11,6 @@
         </title>
         <link rel="icon" href="../../images/cartoonpfpcircle.png" type="image/x-icon">
         <script src="../../js/script.js"></script>
-        <!-- memanggil css dari file lain -->
-        <!-- ada beberapa cara untuk membuat css -->
-        <!-- inline stylesheet -->
-        <!-- internal stylesheet -->
-        <!-- external stylesheet -->
-        <!-- apa yg ditampilkan adalah apa yang dibaca oleh browser terakhir -->
-        <!-- jadi ketika kamu membuat css internal dibawah link ini maka yg dibaca terakhir adalah link tersebut -->
-        <!-- hindari inline css sebisamu untuk meningkatkan keterbacaan -->
         <link rel="stylesheet" href="../../css/main.css" type="text/css">
         <link rel="stylesheet" href="../../css/color.css" type="text/css">
         <link rel="stylesheet" href="../../css/section.css" type="text/css">
@@ -28,8 +19,7 @@
         <link rel="stylesheet" href="../../css/footer.css" type="text/css">
     </head>
 
-    <!-- body menyimpan data yg ditampilkan -->
-    <!-- Webpage sejatinya seperti koran atapun media berbasis text -->
+
     <body>
         <header>
             <nav id="nav-header">
@@ -44,8 +34,7 @@
                         </li>
                     </ul>
                 </div>
-                <!-- kode belum selesai -->
-                <div class="landing-hamburger-menu">
+                 <div class="landing-hamburger-menu">
                     <div class="bar"></div>
                     <div class="bar"></div>
                     <div class="bar"></div>
@@ -53,8 +42,7 @@
             </nav>
         </header>
         <main>
-            <!-- Saat kita inspect element pada browser kita dapat melihat bahwa ada margin dari element tanpa di set -->
-            <section class="main-padding-1">
+             <section class="main-padding-1">
                 <article class="section-type-1 bc-white mrgn-vertical-1 centered-content">
                     <section class="section-type-1-content">
                          <section class="section-type-1-image">
@@ -67,8 +55,7 @@
                              </p>
                          </section>
                     </section>
-                    <!-- <a href="projects/mathplaygasing.html" class="section-type-2-link"></a> -->
-                 </article>
+                  </article>
                  <article class="mrgn-vertical-1 centered-content">
                      <h1 class="title-extralarge">
                          Visual, Audiotori, Kinestetik.

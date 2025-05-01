@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\SoalController;
 use App\Http\Controllers\Api\VisualController;
 use App\Http\Controllers\Api\JawabanPenggunaController;
 
+// get status
 Route::get('/status', function () {
     return response()->json([
         'code' => 200,
@@ -24,8 +25,8 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/lupa-password', [AuthController::class, 'lupaPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/', [AuthController::class, 'x']);
+Route::post('/logout', [AuthController::class, 'logout']);
+Route::get('/', [AuthController::class, 'x']);
 
 
 });
@@ -41,9 +42,9 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     Route::delete('/matapelajaran/{id}', [MataPelajaranController::class, 'destroy']);
 });
 
-//level
+
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
-    // Route::get('/levels', [LevelController::class, 'index']);
+    //level
     Route::post('/levels', [LevelController::class, 'store']);
     Route::delete('/levels/{id}', [LevelController::class, 'destroy']);
     Route::put('/levels/{id}', [LevelController::class, 'update']); 
@@ -51,13 +52,11 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     //soal
     Route::get('/soal', [SoalController::class, 'index']); // Semua soal
     Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
-
     Route::post('/soal', [SoalController::class, 'store']); // Menambah soal baru
     Route::get('/soal/{id}', [SoalController::class, 'show']); // Menampilkan soal berdasarkan ID
     Route::put('/soal/{id}', [SoalController::class, 'update']); // Mengupdate soal
     Route::delete('/soal/{id}', [SoalController::class, 'destroy']); // Menghapus soal
-
-    //menjawab soal kinestetik
+ 
 
     
 });

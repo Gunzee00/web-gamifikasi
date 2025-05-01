@@ -13,7 +13,7 @@ class SkorPengguna extends Model
 
     protected $primaryKey = 'id_skor';
 
-    public $timestamps = false; // Tambahkan ini
+    public $timestamps = false;  
 
     protected $fillable = ['id_user', 'id_mataPelajaran', 'id_level', 'tipeSoal', 'jumlah_benar', 'created_at'];
 
