@@ -37,18 +37,6 @@
                                         <input type="hidden" id="idLevelEdit" value="">
 
                                         <div class="mb-3">
-                                            <label for="id_mataPelajaran" class="form-label">Mata Pelajaran</label>
-                                            <select id="id_mataPelajaran" name="id_mataPelajaran" class="form-control" required>
-                                                <option value="">-- Pilih Mata Pelajaran --</option>
-                                                @foreach($mataPelajaran as $mp)
-                                                    <option value="{{ $mp->id_mataPelajaran }}" {{ old('id_mataPelajaran') == $mp->id_mataPelajaran ? 'selected' : '' }}>
-                                                        {{ $mp->nama_mataPelajaran }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
                                             <label for="penjelasan_level" class="form-label">Nama Level</label>
                                             <input type="text" id="penjelasan_level" name="penjelasan_level" class="form-control"
                                                    value="{{ old('penjelasan_level') }}"
@@ -58,21 +46,6 @@
                                         <button type="submit" class="btn btn-success"><i class="bi bi-save"></i> Simpan</button>
                                         <button type="reset" id="btnResetForm" class="btn btn-secondary"><i class="bi bi-x-circle"></i> Batal</button>
                                     </form>
-                                </div>
-                            </div>
-                            <div class="card mb-4">
-                                <div class="card-header pb-0">
-                                    <h6>Pilih Mata Pelajaran</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="btn-group" role="group">
-                                        @foreach($mataPelajaran as $mp)
-                                            <a href="{{ route('admin.levels.index', ['id_mataPelajaran' => $mp->id_mataPelajaran]) }}"
-                                               class="btn btn-outline-primary {{ ($selectedMataPelajaran == $mp->id_mataPelajaran) ? 'active' : '' }}">
-                                                {{ $mp->nama_mataPelajaran }}
-                                            </a>
-                                        @endforeach
-                                    </div>
                                 </div>
                             </div>
 
@@ -87,7 +60,6 @@
                                             <thead class="table-primary">
                                                 <tr>
                                                     <th>ID Level</th>
-                                                    <th>Mata Pelajaran</th>
                                                     <th>Nama Level</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -96,12 +68,10 @@
                                                 @foreach ($levels as $level)
                                                     <tr>
                                                         <td>{{ $level->id_level }}</td>
-                                                        <td>{{ $level->mataPelajaran->nama_mataPelajaran ?? 'Tidak Diketahui' }}</td>
                                                         <td>{{ $level->penjelasan_level }}</td>
                                                         <td>
                                                             <button class="btn btn-warning btn-sm btn-edit-level me-2" 
                                                                     data-id="{{ $level->id_level }}"
-                                                                    data-id-mata-pelajaran="{{ $level->id_mataPelajaran }}"
                                                                     data-nama="{{ $level->penjelasan_level }}">
                                                                 <i class="bi bi-pencil-square"></i> Edit
                                                             </button>
@@ -155,23 +125,18 @@
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('formLevel');
         const methodField = document.getElementById('methodField');
-        const idMataPelajaranInput = document.getElementById('id_mataPelajaran');
         const penjelasanLevelInput = document.getElementById('penjelasan_level');
-
         const originalAction = form.action;
 
         document.querySelectorAll('.btn-edit-level').forEach(button => {
             button.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
-                const idMataPelajaran = this.getAttribute('data-id-mata-pelajaran');
                 const nama = this.getAttribute('data-nama');
 
                 form.action = `/admin/levels/${id}`;
                 methodField.value = 'PUT';
-                idMataPelajaranInput.value = idMataPelajaran;
                 penjelasanLevelInput.value = nama;
 
-                // Scroll ke atas
                 document.getElementById('formCard').scrollIntoView({ behavior: 'smooth' });
             });
         });
@@ -179,10 +144,10 @@
         document.getElementById('btnResetForm').addEventListener('click', function () {
             form.action = originalAction;
             methodField.value = 'POST';
-            idMataPelajaranInput.value = '';
             penjelasanLevelInput.value = '';
         });
     });
 </script>
 
 @endsection
+    

@@ -1,96 +1,64 @@
 <?php
+
 namespace App\Http\Controllers\Web;
-use Illuminate\Validation\Rule;
-        
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Models\Level;
-use App\Models\MataPelajaran;
 
 class WebLevelController extends Controller
 {
-    public function index(Request $request)
-{
-    $mataPelajaran = MataPelajaran::all();
-    
-    $query = Level::with('mataPelajaran');
+    // Tampilkan semua level
+    public function index()
+    {
+        $levels = Level::all();
 
-    if ($request->has('id_mataPelajaran') && $request->id_mataPelajaran != '') {
-        $query->where('id_mataPelajaran', $request->id_mataPelajaran);
+        return view('admin.level.level', [
+            'title' => 'Web Level',
+            'levels' => $levels
+        ]);
     }
 
-    $levels = $query->get();
+    // Simpan level baru (tanpa mata pelajaran)
+    public function store(Request $request)
+    {
+        $request->validate([
+            'penjelasan_level' => 'required|string|max:255|unique:level,penjelasan_level',
+        ], [
+            'penjelasan_level.required' => 'Nama level wajib diisi.',
+            'penjelasan_level.unique' => 'Level dengan penjelasan ini sudah ada.',
+        ]);
 
-    return view('admin.level.level', [
-        'title' => 'Web Level',
-        'levels' => $levels,
-        'mataPelajaran' => $mataPelajaran,
-        'selectedMataPelajaran' => $request->id_mataPelajaran 
-    ]);
-}   
+        Level::create([
+            'penjelasan_level' => $request->penjelasan_level
+        ]);
 
-public function filter($id_mataPelajaran)
-{
-    $levels = Level::with('mataPelajaran')
-        ->where('id_mataPelajaran', $id_mataPelajaran)
-        ->get();
+        return redirect()->route('admin.levels.index')->with('success', 'Level berhasil ditambahkan.');
+    }
 
-    return response()->json([
-        'html' => view('admin.level.partial_level_table', compact('levels'))->render()
-    ]);
-}
+    // Update level
+    public function update(Request $request, $id)
+    {
+        $level = Level::findOrFail($id);
 
+        $request->validate([
+            'penjelasan_level' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('level', 'penjelasan_level')->ignore($id, 'id_level')
+            ]
+        ]);
 
-public function store(Request $request)
-{
-    $request->validate([
-        'penjelasan_level' => [
-            'required',
-            Rule::unique('level')->where(function ($query) use ($request) {
-                return $query->where('id_mataPelajaran', $request->id_mataPelajaran);
-            }),
-        ],
-        'id_mataPelajaran' => 'required',
-    ], [
-        'penjelasan_level.required' => 'Nama level wajib diisi.',
-        'penjelasan_level.unique' => 'Level tersebut sudah ada untuk mata pelajaran yang dipilih.',
-        'id_mataPelajaran.required' => 'Mata pelajaran wajib dipilih.',
-    ]);
+        $level->update([
+            'penjelasan_level' => $request->penjelasan_level
+        ]);
 
-    Level::create([
-        'id_mataPelajaran' => $request->id_mataPelajaran,
-        'penjelasan_level' => $request->penjelasan_level,
-    ]);
+        return redirect()->route('admin.levels.index')->with('success', 'Level berhasil diperbarui.');
+    }
 
-    return redirect()->route('admin.levels.index')->with('success', 'Level berhasil ditambahkan.');
-}
-
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'id_mataPelajaran' => 'required|exists:matapelajaran,id_mataPelajaran',
-        'penjelasan_level' => [
-            'required',
-            'string',
-            'max:255',
-            Rule::unique('level')
-                ->where(function ($query) use ($request) {
-                    return $query->where('id_mataPelajaran', $request->id_mataPelajaran);
-                })
-                ->ignore($id, 'id_level') 
-        ],
-    ]);
-
-    $level = Level::findOrFail($id);
-    $level->update([
-        'id_mataPelajaran' => $request->id_mataPelajaran,
-        'penjelasan_level' => $request->penjelasan_level,
-    ]);
-
-    return redirect()->route('admin.levels.index')->with('success', 'Level berhasil diperbarui.');
-}
-
-
+    // Hapus level
     public function destroy($id)
     {
         $level = Level::findOrFail($id);
@@ -98,14 +66,4 @@ public function update(Request $request, $id)
 
         return redirect()->route('admin.levels.index')->with('success', 'Level berhasil dihapus.');
     }
-
-    public function getLevelsByMataPelajaran($id_mataPelajaran)
-    {
-        $levels = Level::where('id_mataPelajaran', $id_mataPelajaran)
-                       ->with('mataPelajaran')
-                       ->get();
-    
-        return response()->json(['levels' => $levels]); 
-    }
-    
 }

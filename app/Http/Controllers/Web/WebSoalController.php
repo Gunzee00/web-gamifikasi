@@ -15,16 +15,17 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class WebSoalController extends Controller
 {
-    public function index()
-    {
-        
+   public function index()
+{
+    
+     $levels = Level::all();
+    //  dd($levels->toArray());
 
-        $matapelajaran = MataPelajaran::all();  
-        return view('admin.soal.index', [
-            'title' => 'Soal',
-            'matapelajaran' => $matapelajaran, // Kirim data ke view
-        ]);
-    }
+    return view('admin.soal.index', [
+        'title' => 'Soal',
+       'levels' => $levels
+        ]);    
+}
     
 
  

@@ -46,6 +46,8 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
     //level
     Route::post('/levels', [LevelController::class, 'store']);
+    Route::get('/levels-admin', [LevelController::class, 'index']);
+    Route::get('/levels/{id}', [LevelController::class, 'show']);
     Route::delete('/levels/{id}', [LevelController::class, 'destroy']);
     Route::put('/levels/{id}', [LevelController::class, 'update']); 
 
