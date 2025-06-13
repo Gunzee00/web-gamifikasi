@@ -13,22 +13,23 @@ class SkorPengguna extends Model
 
     protected $primaryKey = 'id_skor';
 
-    public $timestamps = false;  
+    protected $fillable = [
+        'id_user',
+        'id_level',
+        'jumlah_benar',
+        'penjelasan_level',
+        'jumlah_bintang',
+    ];
 
-    protected $fillable = ['id_user', 'id_mataPelajaran', 'id_level', 'tipeSoal', 'jumlah_benar', 'created_at'];
-
+    // Relasi ke User
     public function user()
     {
-        return $this->belongsTo(User::class, 'id_user');
+        return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
-    public function mataPelajaran()
-    {
-        return $this->belongsTo(MataPelajaran::class, 'id_mataPelajaran');
-    }
-
+    // Relasi ke Level
     public function level()
     {
-        return $this->belongsTo(Level::class, 'id_level');
+        return $this->belongsTo(Level::class, 'id_level', 'id_level');
     }
 }

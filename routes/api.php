@@ -70,7 +70,12 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
    Route::get('/soal', [SoalController::class, 'index']); // Semua soal
     //soal berdasarkan mapel dan level
     Route::get('/soal/matapelajaran/{id_mataPelajaran}/level/{id_level}', [SoalController::class, 'getByMataPelajaranAndLevel']);
+    //menjawab soal
 Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
+//cek skor pengguna
+Route::get('/skor', [JawabanPenggunaController::class, 'getSkorSaya']);
+Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBintangSayaByLevel']);
+
          
          Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
             Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
