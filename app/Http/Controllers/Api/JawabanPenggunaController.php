@@ -47,16 +47,17 @@ public function simpanJawaban(Request $request)
         ->take(9)
         ->count();
 
-    // Hitung bintang
-    if ($jumlahBenar >= 9) {
-        $jumlahBintang = 3;
-    } elseif ($jumlahBenar >= 6) {
-        $jumlahBintang = 2;
-    } elseif ($jumlahBenar >= 3) {
-        $jumlahBintang = 1;
-    } else {
-        $jumlahBintang = 0;
-    }
+   
+    // Hitung bintang sesuai jumlah benar
+if ($jumlahBenar >= 7 && $jumlahBenar <= 9) {
+    $jumlahBintang = 3;
+} elseif ($jumlahBenar >= 4 && $jumlahBenar <= 6) {
+    $jumlahBintang = 2;
+} elseif ($jumlahBenar >= 1 && $jumlahBenar <= 3) {
+    $jumlahBintang = 1;
+} else {
+    $jumlahBintang = 0;
+}
 
     // Ambil data level dari soal (pastikan ada relasi `level()` di model Soal)
     $level = $soal->level;
