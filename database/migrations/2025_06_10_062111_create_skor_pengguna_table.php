@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('id_user');
             $table->unsignedBigInteger('id_level');
             $table->integer('jumlah_benar')->default(0);
-            $table->text('penjelasan_level')->nullable();
+            $table->text('nama_level')->nullable();
             $table->integer('jumlah_bintang')->default(0);
             $table->timestamps();
 

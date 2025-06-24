@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Level extends Model
 {
-    protected $table = 'level';  // jika nama tabel bukan plural (levels)
+    use HasFactory;
+
+    protected $table = 'level';
     protected $primaryKey = 'id_level';
+    
+    protected $fillable = ['nama_level']; // sesuaikan dengan struktur tabelmu
 
-    protected $fillable = [
-        'penjelasan_level',
-        // 'id_mataPelajaran', // sudah dihapus kolom ini, jadi jangan dipakai
-    ];
+    public $timestamps = true;
 
-    public $timestamps = true; // sesuai kolom created_at dan updated_at
-
-    // Jika kamu sebelumnya pakai relasi dengan mataPelajaran,
-    // hapus atau sesuaikan jika memang sudah tidak dipakai.
+    public function topiks()
+    {
+        return $this->hasMany(Topik::class, 'id_level', 'id_level');
+    }
 }

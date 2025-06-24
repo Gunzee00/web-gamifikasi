@@ -67,7 +67,7 @@ if ($jumlahBenar >= 7 && $jumlahBenar <= 9) {
         ['id_user' => $user->id_user, 'id_level' => $soal->id_level],
         [
             'jumlah_benar' => $jumlahBenar,
-            'penjelasan_level' => $level->penjelasan_level ?? '',
+            'nama_level' => $level->nama_level ?? '',
             'jumlah_bintang' => $jumlahBintang,
         ]
     );
@@ -161,7 +161,7 @@ public function getBintangSayaByLevel($id_level)
         'id_level' => $id_level,
         'jumlah_bintang' => $skor->jumlah_bintang,
         'jumlah_benar' => $skor->jumlah_benar,
-        'penjelasan_level' => $skor->penjelasan_level,
+        'nama_level' => $skor->nama_level,
     ]);
 }
 

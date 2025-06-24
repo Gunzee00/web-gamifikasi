@@ -37,9 +37,9 @@
                                         <input type="hidden" id="idLevelEdit" value="">
 
                                         <div class="mb-3">
-                                            <label for="penjelasan_level" class="form-label">Nama Level</label>
-                                            <input type="text" id="penjelasan_level" name="penjelasan_level" class="form-control"
-                                                   value="{{ old('penjelasan_level') }}"
+                                            <label for="nama_level" class="form-label">Nama Level</label>
+                                            <input type="text" id="nama_level" name="nama_level" class="form-control"
+                                                   value="{{ old('nama_level') }}"
                                                    required placeholder="Masukkan Nama Level">
                                         </div>
 
@@ -68,16 +68,16 @@
                                                 @foreach ($levels as $level)
                                                     <tr>
                                                         <td>{{ $level->id_level }}</td>
-                                                        <td>{{ $level->penjelasan_level }}</td>
+                                                        <td>{{ $level->nama_level }}</td>
                                                         <td>
                                                             <button class="btn btn-warning btn-sm btn-edit-level me-2" 
                                                                     data-id="{{ $level->id_level }}"
-                                                                    data-nama="{{ $level->penjelasan_level }}">
+                                                                    data-nama="{{ $level->nama_level }}">
                                                                 <i class="bi bi-pencil-square"></i> Edit
                                                             </button>
                                                             <button class="btn btn-danger btn-sm btn-hapus-level" 
                                                                     data-id="{{ $level->id_level }}"
-                                                                    data-nama="{{ $level->penjelasan_level }}">
+                                                                    data-nama="{{ $level->nama_level }}">
                                                                 <i class="bi bi-trash"></i> Hapus
                                                             </button>
                                                         </td>
@@ -125,7 +125,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('formLevel');
         const methodField = document.getElementById('methodField');
-        const penjelasanLevelInput = document.getElementById('penjelasan_level');
+        const penjelasanLevelInput = document.getElementById('nama_level');
         const originalAction = form.action;
 
         document.querySelectorAll('.btn-edit-level').forEach(button => {

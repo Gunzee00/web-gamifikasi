@@ -14,7 +14,7 @@
                         <div class="card mb-1 shadow-sm p-1">
                             <div class="card-body">
  
-                                <p class="text-muted">{{ $level->penjelasan_level }}</p>
+                                <p class="text-muted">{{ $level->nama_level }}</p>
                             </div>
                         </div>
                     </a>

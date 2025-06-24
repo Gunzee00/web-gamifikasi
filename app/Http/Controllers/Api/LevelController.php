@@ -25,7 +25,7 @@ public function index()
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'penjelasan_level' => 'required|string|max:255',
+            'nama_level' => 'required|string|max:255',
         ]);
 
         $level = Level::create($validated);
@@ -64,7 +64,7 @@ public function update(Request $request, $id)
     }
 
     $validated = $request->validate([
-        'penjelasan_level' => 'required|string|max:255',
+        'nama_level' => 'required|string|max:255',
     ]);
 
     $level->update($validated);

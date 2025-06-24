@@ -24,14 +24,14 @@ class WebLevelController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'penjelasan_level' => 'required|string|max:255|unique:level,penjelasan_level',
+            'nama_level' => 'required|string|max:255|unique:level,nama_level',
         ], [
-            'penjelasan_level.required' => 'Nama level wajib diisi.',
-            'penjelasan_level.unique' => 'Level dengan penjelasan ini sudah ada.',
+            'nama_level.required' => 'Nama level wajib diisi.',
+            'nama_level.unique' => 'Level dengan penjelasan ini sudah ada.',
         ]);
 
         Level::create([
-            'penjelasan_level' => $request->penjelasan_level
+            'nama_level' => $request->nama_level
         ]);
 
         return redirect()->route('admin.levels.index')->with('success', 'Level berhasil ditambahkan.');
@@ -43,16 +43,16 @@ class WebLevelController extends Controller
         $level = Level::findOrFail($id);
 
         $request->validate([
-            'penjelasan_level' => [
+            'nama_level' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('level', 'penjelasan_level')->ignore($id, 'id_level')
+                Rule::unique('level', 'nama_level')->ignore($id, 'id_level')
             ]
         ]);
 
         $level->update([
-            'penjelasan_level' => $request->penjelasan_level
+            'nama_level' => $request->nama_level
         ]);
 
         return redirect()->route('admin.levels.index')->with('success', 'Level berhasil diperbarui.');

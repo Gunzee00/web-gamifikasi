@@ -16,7 +16,7 @@
         <a href="{{ route('admin.level.show_soal', $level->id_level) }}" class="text-decoration-none">
             <div class="card mb-4 shadow-sm p-3">
                 <div class="card-body">
-                    <h5 class="text-dark">{{ $level->penjelasan_level }}</h5>
+                    <h5 class="text-dark">{{ $level->nama_level }}</h5>
                 </div>
             </div>
         </a>

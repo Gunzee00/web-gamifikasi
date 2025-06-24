@@ -17,7 +17,7 @@ class SkorPengguna extends Model
         'id_user',
         'id_level',
         'jumlah_benar',
-        'penjelasan_level',
+        'nama_level',
         'jumlah_bintang',
     ];
 

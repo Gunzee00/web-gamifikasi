@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('levels', function (Blueprint $table) {
             $table->id('id_level');
             $table->unsignedBigInteger('id_mataPelajaran');
-            $table->string('penjelasan_level');
+            $table->string('nama_level');
             $table->timestamps();
 
             // Menambahkan foreign key ke tabel mata_pelajarans

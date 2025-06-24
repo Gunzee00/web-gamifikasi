@@ -10,11 +10,10 @@ class Soal extends Model
     use HasFactory;
 
     protected $table = 'soal';
-    protected $primaryKey = 'id_soal';  
-
+    protected $primaryKey = 'id_soal';
 
     protected $fillable = [
-        'id_level',
+        'id_topik',
         'tipeSoal',
         'media',
         'pertanyaan',
@@ -30,10 +29,11 @@ class Soal extends Model
         'jawabanBenar',
     ];
 
-    public function level()
-    {
-        return $this->belongsTo(Level::class, 'id_level', 'id_level');
-    }
-
     public $timestamps = true;
+
+    // Relasi ke topik
+    public function topik()
+    {
+        return $this->belongsTo(Topik::class, 'id_topik', 'id_topik');
+    }
 }

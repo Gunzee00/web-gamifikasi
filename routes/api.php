@@ -8,8 +8,10 @@ use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\MataPelajaranController;
 use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\SoalController;
+ 
 use App\Http\Controllers\Api\VisualController;
 use App\Http\Controllers\Api\JawabanPenggunaController;
+use App\Http\Controllers\Api\TopikController;
 
 // get status
 Route::get('/status', function () {
@@ -58,9 +60,20 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     Route::get('/soal/{id}', [SoalController::class, 'show']); // Menampilkan soal berdasarkan ID
     Route::put('/soal/{id}', [SoalController::class, 'update']); // Mengupdate soal
     Route::delete('/soal/{id}', [SoalController::class, 'destroy']); // Menghapus soal
- 
-
     
+    //topik
+
+ 
+});
+
+Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
+ 
+    //topik
+    Route::get('/topik', [TopikController::class, 'index']); 
+    Route::get('/topik/{id}', [TopikController::class, 'show']); 
+    Route::post('/topik', [TopikController::class, 'store']); 
+    Route::put('/topik/{id}', [TopikController::class, 'update']); 
+    Route::delete('/topik/{id}', [TopikController::class, 'destroy']); 
 });
 
 
@@ -75,8 +88,6 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
 //cek skor pengguna
 Route::get('/skor', [JawabanPenggunaController::class, 'getSkorSaya']);
 Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBintangSayaByLevel']);
-
-         
          Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
             Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
             Route::get('/levels', [LevelController::class, 'index']);
@@ -89,13 +100,15 @@ Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBi
              //skor setelah mengerjakan soal
              Route::get('/skor-akhir', [JawabanPenggunaController::class, 'getSkorAkhir']);
 
-
             //get skor level per level
              Route::get('/skor-akhir-level', [JawabanPenggunaController::class, 'getSkorAkhirPerLevel']);
              //Route::middleware('auth:sanctum')->get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);
              Route::get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);
 
+ 
              
         });
+
+       
 
 }); 
