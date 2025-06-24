@@ -81,6 +81,9 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
    Route::get('/soal', [SoalController::class, 'index']); // Semua soal
+   //
+       Route::get('/topik', [TopikController::class, 'index']); 
+
     //soal berdasarkan mapel dan level
     Route::get('/soal/matapelajaran/{id_mataPelajaran}/level/{id_level}', [SoalController::class, 'getByMataPelajaranAndLevel']);
     //menjawab soal
