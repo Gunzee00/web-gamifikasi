@@ -117,7 +117,7 @@ Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBi
             Route::get('/soal/level/{id_level}', [SoalController::class, 'getByLevel']); // Soal berdasarkan level
              Route::get('/matapelajaran/{id_mataPelajaran}/levels', [LevelController::class, 'getLevelsByMataPelajaran']);
              //cek kelulusan
-             Route::post('/cek-kelulusan-level', [JawabanPenggunaController::class, 'cekKelulusanLevel']);
+             Route::post('/cek-kelulusan-topik', [JawabanPenggunaController::class, 'cekKelulusanTopik ']);
             //  skor terbaru
             Route::middleware('auth:api')->get('/skor-terbaru', [JawabanPenggunaController::class, 'getSkorTerbaru']);
              //skor setelah mengerjakan soal

@@ -15,9 +15,9 @@ class SkorPengguna extends Model
 
     protected $fillable = [
         'id_user',
-        'id_level',
+        'id_topik',         // ganti dari id_level
         'jumlah_benar',
-        'nama_level',
+        'nama_topik',       // ganti dari nama_level
         'jumlah_bintang',
     ];
 
@@ -27,9 +27,9 @@ class SkorPengguna extends Model
         return $this->belongsTo(User::class, 'id_user', 'id_user');
     }
 
-    // Relasi ke Level
-    public function level()
+    // Relasi ke Topik
+    public function topik()
     {
-        return $this->belongsTo(Level::class, 'id_level', 'id_level');
+        return $this->belongsTo(Topik::class, 'id_topik', 'id_topik');
     }
 }
