@@ -74,8 +74,6 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     Route::post('/topik', [TopikController::class, 'store']); 
     Route::put('/topik/{id}', [TopikController::class, 'update']); 
     Route::delete('/topik/{id}', [TopikController::class, 'destroy']); 
-
- 
     Route::get('/level/{id}/topik', [TopikController::class, 'getTopikByLevel']);    
 
 });
@@ -89,6 +87,8 @@ Route::middleware(['auth:sanctum', 'role:user,admin, super_admin'])->group(funct
     //get by id level
     Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
     Route::get('/level/{id}/topik', [TopikController::class, 'getTopikByLevel']);
+    Route::get('/soal/topik/{id_topik}', [SoalController::class, 'getByTopik']);
+
 
 });
 

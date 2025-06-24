@@ -179,4 +179,6 @@ class SoalController extends Controller
             'message' => 'Soal berhasil dihapus'
         ]);
     }
+
+    
 }
