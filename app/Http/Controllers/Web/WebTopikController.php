@@ -77,4 +77,6 @@ class WebTopikController extends Controller
 
         return redirect()->route('topik.index')->with('success', 'Topik berhasil dihapus.');
     }
+
+    
 }

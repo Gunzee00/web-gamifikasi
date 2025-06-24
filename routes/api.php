@@ -69,14 +69,27 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
  
     //topik
-    Route::get('/topik', [TopikController::class, 'index']); 
-    Route::get('/topik/{id}', [TopikController::class, 'show']); 
-    //get by id level
-    Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
+ 
 
     Route::post('/topik', [TopikController::class, 'store']); 
     Route::put('/topik/{id}', [TopikController::class, 'update']); 
     Route::delete('/topik/{id}', [TopikController::class, 'destroy']); 
+
+ 
+    Route::get('/level/{id}/topik', [TopikController::class, 'getTopikByLevel']);    
+
+});
+
+//admin dan user bisa akses
+
+Route::middleware(['auth:sanctum', 'role:user,admin, super_admin'])->group(function () {
+
+   Route::get('/topik', [TopikController::class, 'index']); 
+    Route::get('/topik/{id}', [TopikController::class, 'show']); 
+    //get by id level
+    Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
+    Route::get('/level/{id}/topik', [TopikController::class, 'getTopikByLevel']);
+
 });
 
 
@@ -86,9 +99,10 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
    Route::get('/soal', [SoalController::class, 'index']); // Semua soal
 
    //topik user juga
-       Route::get('/topik', [TopikController::class, 'index']); 
-    Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
-    Route::get('/topik/{id}', [TopikController::class, 'show']); 
+    //    Route::get('/topik', [TopikController::class, 'index']); 
+    // Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
+    // Route::get('/topik/{id}', [TopikController::class, 'show']); 
+
 
     //soal berdasarkan mapel dan level
     Route::get('/soal/matapelajaran/{id_mataPelajaran}/level/{id_level}', [SoalController::class, 'getByMataPelajaranAndLevel']);

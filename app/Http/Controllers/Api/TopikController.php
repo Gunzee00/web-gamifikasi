@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Topik;
+use App\Models\Level;
 use Illuminate\Support\Facades\Validator;
 
 class TopikController extends Controller
@@ -135,5 +136,25 @@ public function getByLevel($id_level)
         'data' => $topik
     ]);
 }
+
+// GET /api/level/{id}/topik
+public function getTopikByLevel($id)
+{
+    $level = Level::with('topiks')->find($id);
+
+    if (!$level) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Level tidak ditemukan'
+        ], 404);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Topik dalam level',
+        'data' => $level->topiks
+    ]);
+}
+
 
 }
