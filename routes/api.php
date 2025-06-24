@@ -88,6 +88,7 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
    //topik user juga
        Route::get('/topik', [TopikController::class, 'index']); 
     Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
+    Route::get('/topik/{id}', [TopikController::class, 'show']); 
 
     //soal berdasarkan mapel dan level
     Route::get('/soal/matapelajaran/{id_mataPelajaran}/level/{id_level}', [SoalController::class, 'getByMataPelajaranAndLevel']);

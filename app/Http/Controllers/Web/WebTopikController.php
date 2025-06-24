@@ -15,7 +15,7 @@ class WebTopikController extends Controller
      $topik = Topik::all();
     //  dd($levels->toArray());
 
-    return view('admin.topik.index', [
+    return view('admin.topik.topik', [
         'title' => 'Topik',
        'topik' =>  $topik
         ]);    
