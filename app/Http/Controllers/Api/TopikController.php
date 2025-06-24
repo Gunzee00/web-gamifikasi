@@ -116,4 +116,24 @@ class TopikController extends Controller
             'message' => 'Topik berhasil dihapus'
         ]);
     }
+
+    // GET /api/topik/level/{id_level}
+public function getByLevel($id_level)
+{
+    $topik = Topik::with('level')->where('id_level', $id_level)->get();
+
+    if ($topik->isEmpty()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Tidak ada topik untuk level ini'
+        ], 404);
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Daftar topik berdasarkan level',
+        'data' => $topik
+    ]);
+}
+
 }

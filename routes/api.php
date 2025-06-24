@@ -71,6 +71,9 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     //topik
     Route::get('/topik', [TopikController::class, 'index']); 
     Route::get('/topik/{id}', [TopikController::class, 'show']); 
+    //get by id level
+    Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
+
     Route::post('/topik', [TopikController::class, 'store']); 
     Route::put('/topik/{id}', [TopikController::class, 'update']); 
     Route::delete('/topik/{id}', [TopikController::class, 'destroy']); 
@@ -81,8 +84,10 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
    Route::get('/soal', [SoalController::class, 'index']); // Semua soal
-   //
+
+   //topik user juga
        Route::get('/topik', [TopikController::class, 'index']); 
+    Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
 
     //soal berdasarkan mapel dan level
     Route::get('/soal/matapelajaran/{id_mataPelajaran}/level/{id_level}', [SoalController::class, 'getByMataPelajaranAndLevel']);
@@ -106,10 +111,7 @@ Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBi
             //get skor level per level
              Route::get('/skor-akhir-level', [JawabanPenggunaController::class, 'getSkorAkhirPerLevel']);
              //Route::middleware('auth:sanctum')->get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);
-             Route::get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);
-
- 
-             
+             Route::get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);            
         });
 
        
