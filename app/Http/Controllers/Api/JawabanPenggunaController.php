@@ -7,6 +7,8 @@ use App\Models\JawabanPengguna;
 use App\Models\SkorPengguna;
 use App\Models\RankPengguna;
 use App\Models\RekapSkorPengguna;
+use App\Models\Topik;
+
 use App\Models\Soal;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -185,5 +187,49 @@ if ($jumlahBenar >= 5 && $jumlahBenar <= 6) {
         'nama_topik' => $skor->nama_topik,
     ]);
 }
+public function cekKelulusanLevel(Request $request)
+{
+    $validated = $request->validate([
+        'id_user' => 'required|integer',
+        'id_level' => 'required|integer',
+    ]);
 
+    // Ambil topik terakhir dalam level, berdasarkan id_topik terbesar
+    $topikTerakhir = Topik::where('id_level', $validated['id_level'])
+       ->orderBy('created_at', 'desc') // atau pakai orderBy('created_at', 'desc') jika tersedia
+        ->first();
+
+    if (!$topikTerakhir) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Tidak ada topik dalam level ini.',
+            'boleh_lanjut_level' => false,
+        ]);
+    }
+
+    // Cek skor pengguna untuk topik terakhir ini
+    $skor = SkorPengguna::where('id_user', $validated['id_user'])
+        ->where('id_topik', $topikTerakhir->id_topik)
+        ->first();
+
+    if (!$skor) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Kamu belum mengerjakan topik terakhir di level ini.',
+            'boleh_lanjut_level' => false,
+        ]);
+    }
+
+    $bolehLanjut = $skor->jumlah_bintang >= 2;
+
+    return response()->json([
+        'status' => $bolehLanjut ? 'success' : 'failed',
+        'message' => $bolehLanjut
+            ? 'Kamu sudah menyelesaikan topik terakhir di level ini dengan minimal 2 bintang. Level berikutnya bisa dibuka.'
+            : 'Kamu belum mencapai minimal 2 bintang di topik terakhir level ini.',
+        'boleh_lanjut_level' => $bolehLanjut,
+        'topik_terakhir' => $topikTerakhir->nama_topik,
+        'jumlah_bintang' => $skor->jumlah_bintang
+    ]);
+}
 }

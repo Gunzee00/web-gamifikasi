@@ -115,7 +115,8 @@ Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
 Route::get('/skor', [JawabanPenggunaController::class, 'getSkorSaya']);
 // Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBintangSayaByLevel']);
 Route::get('/bintang-saya/{id_topik}', [JawabanPenggunaController::class, 'getBintangSayaByTopik']);
-
+//cek kelulusan level
+ Route::post('/cek-kelulusan-level', [JawabanPenggunaController::class, 'cekKelulusanLevel']);
          Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
             Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
             Route::get('/levels', [LevelController::class, 'index']);
@@ -132,8 +133,11 @@ Route::get('/bintang-saya/{id_topik}', [JawabanPenggunaController::class, 'getBi
              Route::get('/skor-akhir-level', [JawabanPenggunaController::class, 'getSkorAkhirPerLevel']);
              //Route::middleware('auth:sanctum')->get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);
              Route::get('/jumlah-benar-level-terbaru', [JawabanPenggunaController::class, 'getJumlahBenarLevelTerbaru']);            
+             //cek kelulusan level
         });
 
-       
+             
+
+
 
 }); 
