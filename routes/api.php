@@ -110,7 +110,9 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
 Route::post('/jawaban', [JawabanPenggunaController::class, 'simpanJawaban']);
 //cek skor pengguna
 Route::get('/skor', [JawabanPenggunaController::class, 'getSkorSaya']);
-Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBintangSayaByLevel']);
+// Route::get('/bintang-saya/{id_level}', [JawabanPenggunaController::class, 'getBintangSayaByLevel']);
+Route::get('/bintang-saya/{id_topik}', [JawabanPenggunaController::class, 'getBintangSayaByTopik']);
+
          Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
             Route::get('/matapelajaran', [MataPelajaranController::class, 'index']);
             Route::get('/levels', [LevelController::class, 'index']);

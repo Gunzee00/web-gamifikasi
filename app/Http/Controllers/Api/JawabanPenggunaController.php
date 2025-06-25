@@ -125,32 +125,38 @@ class JawabanPenggunaController extends Controller
         ]);
     }
 
-    public function getBintangSayaByTopik($id_topik)
-    {
-        $user = Auth::user();
+   public function getBintangSayaByTopik($id_topik)
+{
+    $user = Auth::user();
 
-        if (!$user) {
-            return response()->json(['message' => 'User tidak ditemukan.'], 401);
-        }
-
-        $skor = SkorPengguna::where('id_user', $user->id_user)
-            ->where('id_topik', $id_topik)
-            ->first();
-
-        if (!$skor) {
-            return response()->json([
-                'status' => 'not_found',
-                'message' => 'Skor untuk topik ini belum tersedia.',
-                'jumlah_bintang' => 0
-            ]);
-        }
-
+    if (!$user) {
         return response()->json([
-            'status' => 'success',
-            'id_topik' => $id_topik,
-            'jumlah_bintang' => $skor->jumlah_bintang,
-            'jumlah_benar' => $skor->jumlah_benar,
-            'nama_topik' => $skor->nama_topik,
+            'status' => 'unauthorized',
+            'message' => 'User tidak ditemukan.'
+        ], 401);
+    }
+
+    $skor = SkorPengguna::where('id_user', $user->id_user)
+        ->where('id_topik', $id_topik)
+        ->first();
+
+    if (!$skor) {
+        return response()->json([
+            'status' => 'not_found',
+            'message' => 'Skor untuk topik ini belum tersedia.',
+            'jumlah_bintang' => 0,
+            'jumlah_benar' => 0,
+            'nama_topik' => null,
         ]);
     }
+
+    return response()->json([
+        'status' => 'success',
+        'id_topik' => $id_topik,
+        'jumlah_bintang' => $skor->jumlah_bintang,
+        'jumlah_benar' => $skor->jumlah_benar,
+        'nama_topik' => $skor->nama_topik,
+    ]);
+}
+
 }
