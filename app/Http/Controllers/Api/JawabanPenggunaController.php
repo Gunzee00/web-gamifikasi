@@ -44,7 +44,7 @@ $jumlahBenar = JawabanPengguna::where('id_user', $user->id_user)
     ->count(); // take(9) dihapus karena tidak relevan lagi
 
 // Hitung bintang (total soal = 5)
-if ($jumlahBenar == 5) {
+if ($jumlahBenar >= 5 && $jumlahBenar <= 6) {
     $jumlahBintang = 3;
 } elseif ($jumlahBenar >= 3 && $jumlahBenar <= 4) {
     $jumlahBintang = 2;
