@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\JawabanPengguna;
 use App\Models\SkorPengguna;
+use App\Models\RankPengguna;
 use App\Models\RekapSkorPengguna;
 use App\Models\Soal;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,7 @@ use App\Http\Controllers\Controller;
 
 class JawabanPenggunaController extends Controller
 {
-  public function simpanJawaban(Request $request)
+public function simpanJawaban(Request $request)
 {
     \Log::info('User Auth:', ['user' => Auth::user()]);
 
@@ -36,24 +37,22 @@ class JawabanPenggunaController extends Controller
 
     // Ambil semua soal dengan id_topik yang sama
     $soalIdsTopikIni = Soal::where('id_topik', $soal->id_topik)->pluck('id_soal');
+// Hitung jumlah soal benar dari topik ini
+$jumlahBenar = JawabanPengguna::where('id_user', $user->id_user)
+    ->whereIn('id_soal', $soalIdsTopikIni)
+    ->where('status', 'benar')
+    ->count(); // take(9) dihapus karena tidak relevan lagi
 
-    $jumlahBenar = JawabanPengguna::where('id_user', $user->id_user)
-        ->whereIn('id_soal', $soalIdsTopikIni)
-        ->where('status', 'benar')
-        ->take(9)
-        ->count();
-
-    // Hitung bintang
-    if ($jumlahBenar >= 7 && $jumlahBenar <= 9) {
-        $jumlahBintang = 3;
-    } elseif ($jumlahBenar >= 4 && $jumlahBenar <= 6) {
-        $jumlahBintang = 2;
-    } elseif ($jumlahBenar >= 1 && $jumlahBenar <= 3) {
-        $jumlahBintang = 1;
-    } else {
-        $jumlahBintang = 0;
-    }
-
+// Hitung bintang (total soal = 5)
+if ($jumlahBenar == 5) {
+    $jumlahBintang = 3;
+} elseif ($jumlahBenar >= 3 && $jumlahBenar <= 4) {
+    $jumlahBintang = 2;
+} elseif ($jumlahBenar >= 1 && $jumlahBenar <= 2) {
+    $jumlahBintang = 1;
+} else {
+    $jumlahBintang = 0;
+}
     // Simpan skor berdasarkan topik
     SkorPengguna::updateOrCreate(
         ['id_user' => $user->id_user, 'id_topik' => $soal->id_topik],
@@ -64,13 +63,41 @@ class JawabanPenggunaController extends Controller
         ]
     );
 
+    // Hitung total bintang dari semua topik yang sudah dikerjakan user ini
+    $totalBintang = SkorPengguna::where('id_user', $user->id_user)->sum('jumlah_bintang');
+
+    // Tentukan nama rank berdasarkan total bintang
+    if ($totalBintang >= 18) {
+        $namaRank = 'Emas';
+    } elseif ($totalBintang >= 12) {
+        $namaRank = 'Perak';
+    } elseif ($totalBintang >= 6) {
+        $namaRank = 'Perunggu';
+    } else {
+        $namaRank = 'Perunggu'; // default kalau < 6
+    }
+
+    // Simpan ke tabel rank_pengguna
+    \App\Models\RankPengguna::updateOrCreate(
+        ['id_user' => $user->id_user],
+        [
+            'total_bintang' => $totalBintang,
+            'nama_rank' => $namaRank,
+        ]
+    );
+
     return response()->json([
-        'message' => 'Jawaban disimpan dan skor diperbarui',
+        'message' => 'Jawaban disimpan dan skor + rank diperbarui',
         'jawaban' => $jawaban,
         'jumlah_benar' => $jumlahBenar,
-        'jumlah_bintang' => $jumlahBintang
+        'jumlah_bintang' => $jumlahBintang,
+        'total_bintang' => $totalBintang,
+        'nama_rank' => $namaRank
     ], 200);
 }
+
+
+
 
     public function cekKelulusanTopik(Request $request)
     {

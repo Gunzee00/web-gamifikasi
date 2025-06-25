@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class RankPenggunaController extends Controller
 {
     /**
@@ -16,7 +16,7 @@ class RankPenggunaController extends Controller
     }
 
 
-    public function updateOrGetRank()
+    public function getRank()
 {
     $user = Auth::user();
     if (!$user) {

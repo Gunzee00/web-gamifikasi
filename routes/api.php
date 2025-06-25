@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\MataPelajaranController;
+use App\Http\Controllers\Api\RankPenggunaController;
 use App\Http\Controllers\Api\LevelController;
 use App\Http\Controllers\Api\SoalController;
  
@@ -88,6 +89,8 @@ Route::middleware(['auth:sanctum', 'role:user,admin, super_admin'])->group(funct
     Route::get('/topik/level/{id_level}', [TopikController::class, 'getByLevel']);
     Route::get('/level/{id}/topik', [TopikController::class, 'getTopikByLevel']);
     Route::get('/soal/topik/{id_topik}', [SoalController::class, 'getByTopik']);
+    Route::get('/rank-saya', [RankPenggunaController::class, 'getRank']);
+
 
 
 });
