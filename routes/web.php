@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\WebTopikController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\WebAuthController;
 use App\Http\Controllers\Web\WebLevelController;
@@ -66,8 +67,16 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
     Route::get('/admin/levels/mata-pelajaran/{id_mataPelajaran}', [WebLevelController::class, 'getLevelsByMataPelajaran']);
 
     //Topik Management
+Route::prefix('admin/topik')->name('admin.topik.')->group(function () {
+    Route::get('/', [WebTopikController::class, 'index'])->name('index');
+    Route::post('/', [WebTopikController::class, 'store'])->name('store');
+    Route::put('/{id}', [WebTopikController::class, 'update'])->name('update');
+    Route::delete('/{id}', [WebTopikController::class, 'destroy'])->name('destroy');
+});
 
-    
+Route::get('/admin/levels/{id}/topik', [WebTopikController::class, 'showByLevel'])->name('admin.soal.topik');
+
+
 
     // Mata Pelajaran
  
@@ -87,6 +96,13 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
      Route::put('/soal/{id}', [WebSoalController::class, 'update'])->name('soal.update');
 
      Route::get('/soal/{id_level}', [WebSoalController::class, 'index'])->name('soal.index');
+Route::get('/soal/create-by-topik/{id_topik}', [WebSoalController::class, 'createByTopik'])->name('admin.topik.list_soal');
+// Buat soal berdasarkan topik
+// Route::get('/soal/create-by-topik/{id_topik}', [WebSoalController::class, 'createByTopik'])->name('admin.soal.create_by_topik');
+Route::get('/soal/create-by-topik/{id_topik}', [WebSoalController::class, 'createByTopik'])->name('admin.soal.create_by_topik');
+
+// Tampilkan soal berdasarkan topik
+Route::get('/admin/topik/{id}/soal', [WebSoalController::class, 'showSoalByTopik'])->name('admin.topik.show_soal');
 
 
     // Untuk melihat soal berdasarkan level

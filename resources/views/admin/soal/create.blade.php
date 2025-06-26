@@ -8,7 +8,7 @@
             <div class="card p-4">
                 <form action="{{ route('soal.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="id_level" value="{{ $level->id_level }}">
+<input type="hidden" name="id_topik" value="{{ $topik->id_topik }}">
 
                     <div class="mb-3">
                         <label for="pertanyaan" class="form-label">Pertanyaan</label>

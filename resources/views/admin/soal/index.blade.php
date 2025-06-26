@@ -13,7 +13,7 @@
 
             @foreach($levels as $level)
     <div class="col-12">
-        <a href="{{ route('admin.level.show_soal', $level->id_level) }}" class="text-decoration-none">
+<a href="{{ route('admin.soal.topik', $level->id_level) }}" class="text-decoration-none">
             <div class="card mb-4 shadow-sm p-3">
                 <div class="card-body">
                     <h5 class="text-dark">{{ $level->nama_level }}</h5>

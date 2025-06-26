@@ -9,25 +9,14 @@ use Illuminate\Http\Request;
 
 class WebTopikController extends Controller
 {
-    // Tampilkan semua topik
-    public function index()
+   public function index()
 {
-     $topik = Topik::all();
-    //  dd($levels->toArray());
+    $topiks = Topik::with('level')->get();
+    $levels = Level::all();
+    $title = 'Manajemen Topik'; // <-- tambahkan ini
 
-    return view('admin.topik.topik', [
-        'title' => 'Topik',
-       'topik' =>  $topik
-        ]);    
+    return view('admin.topik.topik', compact('topiks', 'levels', 'title'));
 }
-    // Tampilkan form tambah topik
-    public function create()
-    {
-        $levels = Level::all();
-        return view('topik.create', compact('levels'));
-    }
-
-    // Simpan topik baru
     public function store(Request $request)
     {
         $request->validate([
@@ -36,47 +25,49 @@ class WebTopikController extends Controller
         ]);
 
         Topik::create($request->only('id_level', 'nama_topik'));
-
-        return redirect()->route('topik.index')->with('success', 'Topik berhasil ditambahkan.');
+        return redirect()->route('admin.topik.index')->with('success', 'Topik berhasil ditambahkan.');
     }
 
-    // Tampilkan detail topik
-    public function show($id)
-    {
-        $topik = Topik::with('level')->findOrFail($id);
-        return view('topik.show', compact('topik'));
-    }
-
-    // Tampilkan form edit
-    public function edit($id)
-    {
-        $topik = Topik::findOrFail($id);
-        $levels = Level::all();
-        return view('topik.edit', compact('topik', 'levels'));
-    }
-
-    // Update topik
     public function update(Request $request, $id)
     {
+        $topik = Topik::findOrFail($id);
+
         $request->validate([
             'id_level' => 'required|exists:level,id_level',
             'nama_topik' => 'required|string|max:255',
         ]);
 
-        $topik = Topik::findOrFail($id);
         $topik->update($request->only('id_level', 'nama_topik'));
-
-        return redirect()->route('topik.index')->with('success', 'Topik berhasil diperbarui.');
+        return redirect()->route('admin.topik.index')->with('success', 'Topik berhasil diperbarui.');
     }
 
-    // Hapus topik
     public function destroy($id)
     {
         $topik = Topik::findOrFail($id);
         $topik->delete();
-
-        return redirect()->route('topik.index')->with('success', 'Topik berhasil dihapus.');
+        return redirect()->route('admin.topik.index')->with('success', 'Topik berhasil dihapus.');
     }
 
-    
+
+    public function showByLevel($id_level)
+{
+    $level = Level::findOrFail($id_level);
+    $topiks = Topik::where('id_level', $id_level)->get();
+    $title =   $level->nama_level;
+
+    return view('admin.soal.topik', compact('topiks', 'level', 'title'));
+}
+
+public function createByTopik($id_topik)
+{
+    $topik = \App\Models\Topik::with('level')->findOrFail($id_topik);
+
+    return view('admin.soal.create', [
+        'title' => 'Tambah Soal untuk Topik ' . $topik->nama_topik,
+        'topik' => $topik,
+        'level' => $topik->level, // opsional kalau masih mau pakai id_level
+    ]);
+}
+
+
 }

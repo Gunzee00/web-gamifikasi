@@ -102,39 +102,50 @@ if ($jumlahBenar >= 5 && $jumlahBenar <= 6) {
 
 
     public function cekKelulusanTopik(Request $request)
-    {
-        $validated = $request->validate([
-            'id_user' => 'required|integer',
-            'id_topik' => 'required|integer',
-        ]);
+{
+    $validated = $request->validate([
+        'id_user' => 'required|integer',
+        'id_topik' => 'required|integer',
+    ]);
 
-        $soalIds = Soal::where('id_topik', $validated['id_topik'])->pluck('id_soal');
+    // Cek apakah ada soal untuk topik ini
+    $adaSoal = Soal::where('id_topik', $validated['id_topik'])->exists();
 
-        if ($soalIds->isEmpty()) {
-            return response()->json([
-                'status' => 'failed',
-                'message' => 'Belum ada soal pada topik ini.',
-                'boleh_lanjut' => false,
-                'jumlah_benar' => 0
-            ]);
-        }
-
-        $jumlahBenar = JawabanPengguna::where('id_user', $validated['id_user'])
-            ->whereIn('id_soal', $soalIds)
-            ->where('status', 'benar')
-            ->count();
-
-        $bolehLanjut = $jumlahBenar >= 3;
-
+    if (!$adaSoal) {
         return response()->json([
-            'status' => $bolehLanjut ? 'success' : 'failed',
-            'message' => $bolehLanjut
-                ? 'Kamu bisa lanjut ke topik berikutnya.'
-                : 'Minimal 3 soal benar untuk bisa lanjut ke topik berikutnya.',
-            'boleh_lanjut' => $bolehLanjut,
-            'jumlah_benar' => $jumlahBenar
+            'status' => 'failed',
+            'message' => 'Belum ada soal pada topik ini.',
+            'boleh_lanjut' => false,
+            'jumlah_bintang' => 0
         ]);
     }
+
+    // Ambil skor pengguna untuk topik ini
+    $skor = \App\Models\SkorPengguna::where('id_user', $validated['id_user'])
+        ->where('id_topik', $validated['id_topik'])
+        ->first();
+
+    if (!$skor) {
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Kamu belum mengerjakan soal pada topik ini.',
+            'boleh_lanjut' => false,
+            'jumlah_bintang' => 0
+        ]);
+    }
+
+    $bolehLanjut = $skor->jumlah_bintang >= 2;
+
+    return response()->json([
+        'status' => $bolehLanjut ? 'success' : 'failed',
+        'message' => $bolehLanjut
+            ? 'Kamu bisa lanjut ke topik berikutnya.'
+            : 'Minimal 2 bintang diperlukan untuk lanjut ke topik berikutnya.',
+        'boleh_lanjut' => $bolehLanjut,
+        'jumlah_bintang' => $skor->jumlah_bintang
+    ]);
+}
+
 
     public function getSkorSaya()
     {
