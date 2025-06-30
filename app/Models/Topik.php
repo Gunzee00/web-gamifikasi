@@ -15,6 +15,7 @@ class Topik extends Model
     protected $fillable = [
         'id_level',     // tambahkan ini
         'nama_topik',
+        'icon',
     ];
 
     public $timestamps = true;
