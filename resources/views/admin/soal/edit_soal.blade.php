@@ -66,24 +66,43 @@
                     </div>
                     @endif
 
-                    {{-- Opsi --}}
-                    <div class="mb-3">
-                        <label class="form-label">Opsi</label>
-                        @php
-                            $opsiKeys = in_array($tipe, ['visual2', 'auditori2']) ? ['A', 'B'] : ['A', 'B', 'C', 'D'];
-                            $isFileOpsi = in_array($tipe, ['visual2', 'auditori2']);
-                        @endphp
-                        @foreach($opsiKeys as $opt)
-                        <div class="mt-3 border rounded p-3">
-                            <label class="form-label">Opsi {{ $opt }}</label>
-                            @if($isFileOpsi)
-                            <input type="file" name="opsi{{ $opt }}" class="form-control">
-                            @else
-                            <input type="text" name="opsi{{ $opt }}" class="form-control" value="{{ old('opsi'.$opt, $soal->{'opsi'.$opt}) }}">
-                            @endif
-                        </div>
-                        @endforeach
-                    </div>
+                  {{-- Opsi --}}
+<div class="mb-3">
+    <label class="form-label">Opsi</label>
+    @php
+        $opsiKeys = in_array($tipe, ['visual2', 'auditori2']) ? ['A', 'B'] : ['A', 'B', 'C', 'D'];
+        $isFileOpsi = in_array($tipe, ['visual2', 'auditori2']);
+    @endphp
+    @foreach($opsiKeys as $opt)
+    <div class="mt-3 border rounded p-3">
+        <label class="form-label">Opsi {{ $opt }}</label>
+        @if($isFileOpsi)
+            <input type="file" name="opsi{{ $opt }}" class="form-control">
+
+            {{-- Tampilkan file lama jika ada --}}
+            @php
+                $file = $soal->{'opsi'.$opt};
+            @endphp
+            @if($file)
+                <div class="mt-2">
+                    @if(Str::endsWith($file, ['jpg', 'jpeg', 'png', 'gif']))
+                        <img src="{{ $file }}" class="img-fluid rounded" style="max-width: 200px;">
+                    @elseif(Str::endsWith($file, ['mp4', 'webm', 'ogg']))
+                        <video controls class="w-100" style="max-width: 250px;">
+                            <source src="{{ $file }}">
+                        </video>
+                    @else
+                        <a href="{{ $file }}" target="_blank">Lihat File Opsi {{ $opt }}</a>
+                    @endif
+                </div>
+            @endif
+        @else
+            <input type="text" name="opsi{{ $opt }}" class="form-control" value="{{ old('opsi'.$opt, $soal->{'opsi'.$opt}) }}">
+        @endif
+    </div>
+    @endforeach
+</div>
+
 
                     {{-- Pasangan (untuk kinestetik) --}}
                     @if(Str::startsWith($tipe, 'kinestetik'))
