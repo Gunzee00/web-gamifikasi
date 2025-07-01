@@ -66,8 +66,8 @@
                     </div>
                     @endif
 
-                    {{-- Opsi (jika bukan kinestetik) --}}
-                    @if(!Str::startsWith($tipe, 'kinestetik'))
+                    {{-- Opsi (kecuali untuk kinestetik2) --}}
+                    @if($tipe !== 'kinestetik2')
                     <div class="mb-3">
                         <label class="form-label">Opsi</label>
                         @php
