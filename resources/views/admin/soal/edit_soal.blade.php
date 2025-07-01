@@ -48,7 +48,7 @@
                     </div>
 
                     {{-- Media --}}
-                    @if(!in_array($tipe, ['visual2', 'kinestetik1']))
+                    @if($tipe !== 'visual2' && $tipe !== 'kinestetik1')
                     <div class="mb-3">
                         <label class="form-label">Media</label>
                         <input type="file" class="form-control" name="media">
@@ -66,46 +66,44 @@
                     </div>
                     @endif
 
-                  {{-- Opsi --}}
-<div class="mb-3">
-    <label class="form-label">Opsi</label>
-    @php
-        $opsiKeys = in_array($tipe, ['visual2', 'auditori2']) ? ['A', 'B'] : ['A', 'B', 'C', 'D'];
-        $isFileOpsi = in_array($tipe, ['visual2', 'auditori2']);
-    @endphp
-    @foreach($opsiKeys as $opt)
-    <div class="mt-3 border rounded p-3">
-        <label class="form-label">Opsi {{ $opt }}</label>
-        @if($isFileOpsi)
-            <input type="file" name="opsi{{ $opt }}" class="form-control">
-
-            {{-- Tampilkan file lama jika ada --}}
-            @php
-                $file = $soal->{'opsi'.$opt};
-            @endphp
-            @if($file)
-                <div class="mt-2">
-                    @if(Str::endsWith($file, ['jpg', 'jpeg', 'png', 'gif']))
-                        <img src="{{ $file }}" class="img-fluid rounded" style="max-width: 200px;">
-                    @elseif(Str::endsWith($file, ['mp4', 'webm', 'ogg']))
-                        <video controls class="w-100" style="max-width: 250px;">
-                            <source src="{{ $file }}">
-                        </video>
-                    @else
-                        <a href="{{ $file }}" target="_blank">Lihat File Opsi {{ $opt }}</a>
+                    {{-- Opsi (jika bukan kinestetik) --}}
+                    @if(!Str::startsWith($tipe, 'kinestetik'))
+                    <div class="mb-3">
+                        <label class="form-label">Opsi</label>
+                        @php
+                            $opsiKeys = in_array($tipe, ['visual2', 'auditori2']) ? ['A', 'B'] : ['A', 'B', 'C', 'D'];
+                            $isFileOpsi = in_array($tipe, ['visual2', 'auditori2']);
+                        @endphp
+                        @foreach($opsiKeys as $opt)
+                        <div class="mt-3 border rounded p-3">
+                            <label class="form-label">Opsi {{ $opt }}</label>
+                            @if($isFileOpsi)
+                                <input type="file" name="opsi{{ $opt }}" class="form-control">
+                                @php $file = $soal->{'opsi'.$opt}; @endphp
+                                @if($file)
+                                    <div class="mt-2">
+                                        @if(Str::endsWith($file, ['jpg', 'jpeg', 'png', 'gif']))
+                                            <img src="{{ $file }}" class="img-fluid rounded" style="max-width: 200px;">
+                                        @elseif(Str::endsWith($file, ['mp4', 'webm', 'ogg']))
+                                            <video controls class="w-100" style="max-width: 250px;">
+                                                <source src="{{ $file }}">
+                                            </video>
+                                        @else
+                                            <a href="{{ $file }}" target="_blank">Lihat File Opsi {{ $opt }}</a>
+                                        @endif
+                                    </div>
+                                @endif
+                            @else
+                                <input type="text" name="opsi{{ $opt }}" class="form-control"
+                                    value="{{ old('opsi'.$opt, $soal->{'opsi'.$opt}) }}">
+                            @endif
+                        </div>
+                        @endforeach
+                    </div>
                     @endif
-                </div>
-            @endif
-        @else
-            <input type="text" name="opsi{{ $opt }}" class="form-control" value="{{ old('opsi'.$opt, $soal->{'opsi'.$opt}) }}">
-        @endif
-    </div>
-    @endforeach
-</div>
 
-
-                    {{-- Pasangan (untuk kinestetik) --}}
-                    @if(Str::startsWith($tipe, 'kinestetik'))
+                    {{-- Pasangan (khusus kinestetik1) --}}
+                    @if($tipe === 'kinestetik1')
                     <div class="mb-3">
                         <label class="form-label">Pasangan (A-D)</label>
                         @foreach(['A','B','C','D'] as $opt)
@@ -133,7 +131,7 @@
                     <div class="mb-3">
                         <label class="form-label">Jawaban Benar</label>
 
-                        @if(Str::startsWith($tipe, 'kinestetik'))
+                        @if($tipe === 'kinestetik1')
                             @php
                                 $opsi = ['A','B','C','D'];
                                 $pasangan = ['A','B','C','D'];
@@ -146,7 +144,7 @@
                                     <label>Opsi {{ $item }}</label>
                                 </div>
                                 <div class="col-md-4">
-                                    <select name="jawabanBenarArray[{{ $item }}]" class="form-control">
+                                    <select name="jawaban_pair[{{ $item }}]" class="form-control">
                                         <option value="">-- Pilih Pasangan --</option>
                                         @foreach($pasangan as $p)
                                             <option value="{{ $p }}" {{ (isset($jawabanArray[$item]) && $jawabanArray[$item] == $p) ? 'selected' : '' }}>
@@ -157,7 +155,10 @@
                                 </div>
                             </div>
                             @endforeach
-                            <input type="hidden" name="jawabanBenar" id="jawabanBenarFinal">
+                        @elseif($tipe === 'kinestetik2')
+                            <input type="text" name="jawabanBenarText" class="form-control"
+                                value="{{ old('jawabanBenarText', $soal->jawabanBenar) }}"
+                                placeholder="Masukkan jawaban benar (teks)">
                         @else
                             @php
                                 $opsiBenar = in_array($tipe, ['visual2', 'auditori2']) ? ['A', 'B'] : ['A', 'B', 'C', 'D'];

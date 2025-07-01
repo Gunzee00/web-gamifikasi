@@ -8,7 +8,7 @@
             <div class="card p-4">
                 <form action="{{ route('soal.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-<input type="hidden" name="id_topik" value="{{ $topik->id_topik }}">
+                    <input type="hidden" name="id_topik" value="{{ $topik->id_topik }}">
 
                     <div class="mb-3">
                         <label for="pertanyaan" class="form-label">Pertanyaan</label>
@@ -28,10 +28,10 @@
                     </div>
 
                     {{-- OPSI --}}
-                    <div class="mb-3">
+                    <div class="mb-3" id="opsiFields">
                         <label class="form-label">Opsi</label>
                         @foreach(['A','B','C','D'] as $opt)
-                        <div class="mt-3 border rounded p-3">
+                        <div class="mt-3 border rounded p-3 opsi-block" id="opsi-block-{{ $opt }}">
                             <label class="form-label">Opsi {{ $opt }}</label>
                             <select class="form-select mb-2" onchange="toggleInput(this, 'opsi{{ $opt }}')">
                                 <option value="text">Teks</option>
@@ -48,7 +48,7 @@
                         <div class="mb-3">
                             <label class="form-label">Pasangan</label>
                             @foreach(['A','B','C','D'] as $opt)
-                            <div class="mt-3 border rounded p-3">
+                            <div class="mt-3 border rounded p-3 pasangan-block" id="pasangan-block-{{ $opt }}">
                                 <label class="form-label">Pasangan {{ $opt }}</label>
                                 <select class="form-select mb-2" onchange="toggleInput(this, 'pasangan{{ $opt }}')">
                                     <option value="text">Teks</option>
@@ -97,12 +97,14 @@
                         <input type="text" name="jawabanBenarText" class="form-control">
                     </div>
 
+                    {{-- MEDIA --}}
                     <div class="mb-3">
                         <label for="media" class="form-label">Media (Opsional)</label>
                         <input type="file" name="media" class="form-control">
                     </div>
 
-                    <div class="mb-3">
+                    {{-- AUDIO --}}
+                    <div class="mb-3" id="audioFormGroup">
                         <label for="audioPertanyaan" class="form-label">Audio (Opsional)</label>
                         <input type="file" name="audioPertanyaan" class="form-control">
                     </div>
@@ -110,7 +112,6 @@
                     <button type="submit" class="btn btn-success">
                         <i class="fas fa-save"></i> Simpan Soal
                     </button>
-                   
                 </form>
             </div>
         </div>
@@ -140,40 +141,40 @@
             const jawabanSingle = document.getElementById('jawabanSingleField');
             const jawabanKinestetik1 = document.getElementById('jawabanBenarKinestetik1');
             const jawabanKinestetik2 = document.getElementById('jawabanBenarKinestetik2');
+            const opsiFields = document.getElementById('opsiFields');
+            const audioFormGroup = document.getElementById('audioFormGroup');
             const mediaFormGroup = document.querySelector('input[name="media"]').closest('.mb-3');
-            const audioFormGroup = document.querySelector('input[name="audioPertanyaan"]').closest('.mb-3');
 
             jawabanSingle.style.display = 'none';
             jawabanKinestetik1.style.display = 'none';
             jawabanKinestetik2.style.display = 'none';
             pasanganFields.style.display = 'none';
-            mediaFormGroup.style.display = 'block';
+            opsiFields.style.display = 'block';
             audioFormGroup.style.display = 'block';
+            mediaFormGroup.style.display = 'block';
 
-            ['A','B','C','D'].forEach(opt => {
-                const el = document.querySelector(`[name="opsi${opt}"]`)?.closest('.border');
-                if (el) el.style.display = 'block';
-            });
-
-            if (tipe.startsWith('kinestetik')) {
+            if (tipe === 'kinestetik1') {
+                jawabanKinestetik1.style.display = 'block';
                 pasanganFields.style.display = 'block';
-
-                if (tipe === 'kinestetik1') {
-                    jawabanKinestetik1.style.display = 'block';
-                    mediaFormGroup.style.display = 'none';
-                } else if (tipe === 'kinestetik2') {
-                    jawabanKinestetik2.style.display = 'block';
-                }
-
+                mediaFormGroup.style.display = 'none';
+            } else if (tipe === 'kinestetik2') {
+                jawabanKinestetik2.style.display = 'block';
+                opsiFields.style.display = 'none';
+                pasanganFields.style.display = 'none';
+                audioFormGroup.style.display = 'none';
             } else if (tipe === 'visual2' || tipe === 'auditori2') {
                 jawabanSingle.style.display = 'block';
                 mediaFormGroup.style.display = 'none';
-                ['C','D'].forEach(opt => {
-                    const el = document.querySelector(`[name="opsi${opt}"]`)?.closest('.border');
+                ['C', 'D'].forEach(opt => {
+                    const el = document.getElementById(`opsi-block-${opt}`);
                     if (el) el.style.display = 'none';
                 });
             } else {
                 jawabanSingle.style.display = 'block';
+                ['A', 'B', 'C', 'D'].forEach(opt => {
+                    const el = document.getElementById(`opsi-block-${opt}`);
+                    if (el) el.style.display = 'block';
+                });
             }
         }
 

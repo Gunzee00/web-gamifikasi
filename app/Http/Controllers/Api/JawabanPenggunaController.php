@@ -45,16 +45,18 @@ $jumlahBenar = JawabanPengguna::where('id_user', $user->id_user)
     ->where('status', 'benar')
     ->count(); // take(9) dihapus karena tidak relevan lagi
 
-// Hitung bintang (total soal = 5)
-if ($jumlahBenar >= 5 && $jumlahBenar <= 6) {
+// Hitung bintang berdasarkan jumlah benar
+if ($jumlahBenar >= 3) {
     $jumlahBintang = 3;
-} elseif ($jumlahBenar >= 3 && $jumlahBenar <= 4) {
+} elseif ($jumlahBenar == 2) {
     $jumlahBintang = 2;
-} elseif ($jumlahBenar >= 1 && $jumlahBenar <= 2) {
+} elseif ($jumlahBenar == 1) {
     $jumlahBintang = 1;
 } else {
     $jumlahBintang = 0;
 }
+
+
     // Simpan skor berdasarkan topik
     SkorPengguna::updateOrCreate(
         ['id_user' => $user->id_user, 'id_topik' => $soal->id_topik],
@@ -71,9 +73,9 @@ if ($jumlahBenar >= 5 && $jumlahBenar <= 6) {
     // Tentukan nama rank berdasarkan total bintang
     if ($totalBintang >= 18) {
         $namaRank = 'Emas';
-    } elseif ($totalBintang >= 12) {
+    } elseif ($totalBintang >= 9) {
         $namaRank = 'Perak';
-    } elseif ($totalBintang >= 6) {
+    } elseif ($totalBintang >= 0) {
         $namaRank = 'Perunggu';
     } else {
         $namaRank = 'Perunggu'; // default kalau < 6
