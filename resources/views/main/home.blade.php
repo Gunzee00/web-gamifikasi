@@ -2,33 +2,50 @@
 
 @section('content')
 <div class="container mt-5">
-    <div class="row">
-         <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 rounded">
-                <div class="card-body text-center">
-                     <div class="icon icon-shape icon-md bg-primary text-white rounded-circle mb-3">
-                        <i class="fas fa-users"></i>
-                    </div>
-                     <h6 class="card-title text-uppercase mb-2">Total User</h6>
-                     {{-- <p class="h4 font-weight-bold">{{ $totalUsers }}</p> --}}
-                     <p class="text-muted">Total user yang terdaftar </p>
-                </div>
-            </div>
-        </div>
+    <div class="row justify-content-center">
 
-         <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 rounded">
-                <div class="card-body text-center">
-                    <!-- Ikon dengan ukuran lebih kecil -->
-                    <div class="icon icon-shape icon-md bg-warning text-white rounded-circle mb-3">
-                        <i class="fas fa-book"></i>
+        <!-- Card Dashboard Item -->
+        @php
+            $cards = [
+                [
+                    'title' => 'Total Level',
+                    'value' => $totalLevel,
+                    'subtitle' => 'Jumlah level pembelajaran',
+                    'icon' => 'fas fa-layer-group',
+                    'color' => 'success'
+                ],
+                [
+                    'title' => 'Total Topik',
+                    'value' => $totalTopik,
+                    'subtitle' => 'Jumlah topik yang tersedia',
+                    'icon' => 'fas fa-lightbulb',
+                    'color' => 'info'
+                ],
+                [
+                    'title' => 'Total Soal',
+                    'value' => $totalSoal,
+                    'subtitle' => 'Total soal latihan',
+                    'icon' => 'fas fa-question-circle',
+                    'color' => 'danger'
+                ],
+            ];
+        @endphp
+
+        @foreach($cards as $card)
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <div class="mb-3 d-flex align-items-center justify-content-center mx-auto rounded-circle bg-{{ $card['color'] }} text-white" style="width: 70px; height: 70px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+                            <i class="{{ $card['icon'] }} fa-2x"></i>
+                        </div>
+                        <h6 class="text-uppercase text-muted">{{ $card['title'] }}</h6>
+                        <h3 class="font-weight-bold mb-1">{{ $card['value'] }}</h3>
+                        <p class="text-muted small mb-0">{{ $card['subtitle'] }}</p>
                     </div>
-                     <h6 class="card-title text-uppercase mb-2">Total Mata Pelajaran</h6>
-                     {{-- <p class="h4 font-weight-bold">{{ $totalMatapelajaran }}</p> --}}
-                     <p class="text-muted">Total mata pelajaran yang tersedia</p>
                 </div>
             </div>
-        </div>
+        @endforeach
+
     </div>
 </div>
 @endsection
